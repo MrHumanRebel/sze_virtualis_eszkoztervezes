@@ -42,6 +42,21 @@ Windows parancssorból:
 
 Az ABC123 helyére a saját Neptun-kódod kerüljön.
 
+### Ha a 10 000 darab már lefutott, csak a képexport hibázott
+
+A 2404-es Siemens-futtatásban 2026. november 22-én a teljes modell
+**4 200 734 másodperc** szimulációs időig eljutott, és a Siemens
+elmentette a végső `.spp` fájlt. A hibát a régi képexport okozta.
+
+A meglévő **`output` mappát ne töröld!** Frissítsd a programfájlokat,
+majd indítsd az új **`EXPORT_KEPEK.bat`** fájlt. Ez egyetlen .spp-t
+automatikusan kiválaszt, ellenőrzi a korábbi számlálókat, és legenerálja
+az öt képet és a mérési PDF-et, teljes újraszimulálás nélkül.
+
+Ha az SPP újranyitásakor a Siemens nullázta a futási statisztikát,
+az ellenőrzés hibával leáll. Akkor a normál `INDITAS.bat` futtatásra
+van szükség.
+
 ## Bizonyítás és feltöltés
 
 Amíg nincs sikeres Siemens-futtatás, **nincs igazolt beadandó .spp és nincs valódi screenshot** a repóban. Nem helyettesítem ezeket látványtervekkel.
