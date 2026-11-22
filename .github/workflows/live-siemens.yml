@@ -1,0 +1,39 @@
+name: Siemens live verification (your Windows runner)
+on:
+  workflow_dispatch:
+    inputs:
+      neptun:
+        description: "Your 6-character Neptun code"
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  real-siemens:
+    runs-on: [self-hosted, Windows, plant-simulation]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install Python dependencies
+        shell: pwsh
+        run: python -m pip install -e ".[windows]"
+      - name: Build, simulate and capture genuine screenshots
+        shell: pwsh
+        run: |
+          $payload = Get-Content $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
+          $neptun = $payload.inputs.neptun
+          python -m sze_virtualis_eszkoztervezes --neptun $neptun --timeout 1800
+          if ($LASTEXITCODE -ne 0) { throw "Plant Simulation validation failed" }
+      - name: Publish the verified SPP and screenshots
+        shell: pwsh
+        run: |
+          $payload = Get-Content $env:GITHUB_EVENT_PATH -Raw | ConvertFrom-Json
+          .\tools\publish_results.ps1 -Neptun $payload.inputs.neptun
+      - name: Keep log artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: siemens-live-evidence
+          path: output/
+          if-no-files-found: warn
