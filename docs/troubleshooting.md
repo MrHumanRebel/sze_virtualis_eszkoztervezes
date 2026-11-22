@@ -123,3 +123,36 @@ külön mutatja a szimulációs időt, a forrás/kontroll/címkézés/csomagolá
 statisztikáit és a két kimenetet. Ha 7200 szimulációs másodperc
 elteltével a forrás vagy a QC biztosan nem halad, a program
 figyelmeztetéssel leáll, és a diagnosztika alapján javítható.
+
+
+## Plant Simulation 2404 — `copyBitmapToFile` (2026.11.22, 20:05)
+
+A teljes 10 000 darabos futás a 2404-es Siemensben **sikerrel befejeződött**
+(élő log szerint: `SimTime=4200734.0 s`, kb. 48 nap 14 óra 52 perc),
+a kész `JAXC3C.spp` 335 872 bájtos változatát a Siemens elmentette.
+A hibát ezután a képexport okozta: a `Frame.copyBitmapToFile` csak
+három paramétert kapott, pedig ötöt vár.
+
+Az eltérő, dokumentált metódusok:
+
+- Frame: `Frame.copyBitmapToFile("kimenet.png", 0, 0, 1800, 1000)`
+- Chart: `Chart.copyBitmapToFile("kimenet.png", 1500, 900)`
+
+**Legkevesebb munka, ha már megvan az eredmény:**
+
+1. A korábbi `output` mappát (benne az SPP + JSON fájlokkal) **tartsd meg**.
+2. Töltsd le az új `main` ág fájljait, és frissítsd vele a programot
+   az `output` mappa törlése nélkül.
+3. Indítsd az új **`EXPORT_KEPEK.bat`** fájlt (nem az `INDITAS.bat`-ot).
+4. A program újranyitja az SPP-t, összeveti a mentett Siemens-statisztikákat
+   a korábbi futás eredményével, és legenerálja az öt valódi PNG-t.
+5. Az öt kép a `output/screenshots` mappába, a mérési PDF pedig az
+   `output/Siemens_meresi_jegyzokonyv.pdf` fájlba kerül.
+
+A képek generálásakor a régi, azonos nevű fájlok törlődnek, így az ellenőrzés
+nem fogad el véletlenül egy korábbi screenshotot.
+
+**Ha a Siemens egy elmentett `.spp` újranyitásakor nullázza a
+statisztikákat:** az `EXPORT_KEPEK.bat` szándékosan hibával leáll. Ilyenkor
+a teljes szimuláció újrafuttatása a megoldás, de az új `INDITAS.bat`
+már a javított képexportot használja.
