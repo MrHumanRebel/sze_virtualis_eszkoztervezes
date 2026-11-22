@@ -65,6 +65,9 @@ def main(argv=None) -> int:
             from .evidence import capture
             manifest = capture(builder, dest)
             log.info("Valódi Siemens képek: %s", len(manifest["screenshots"]))
+            from .result_report import generate
+            pdf_path = generate(out)
+            log.info("Eredményjegyzőkönyv: %s", pdf_path)
         log.info("Fájl: %s", dest)
         return 0
     except Exception:

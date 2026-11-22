@@ -33,6 +33,9 @@ Copy-Item $spp (Join-Path $target "$Neptun.spp") -Force
 Copy-Item $result (Join-Path $target 'simulation_result.json') -Force
 Copy-Item $validation (Join-Path $target 'config_validation.json') -Force
 Copy-Item $manifest (Join-Path $target 'evidence_manifest.json') -Force
+$report=Join-Path $local 'Siemens_meresi_jegyzokonyv.pdf'
+if (!(Test-Path $report)) { throw 'A valós mérési jegyzőkönyv hiányzik.' }
+Copy-Item $report (Join-Path $target 'Siemens_meresi_jegyzokonyv.pdf') -Force
 $shots=Join-Path $target 'screenshots'
 New-Item -ItemType Directory -Path $shots -Force | Out-Null
 Copy-Item (Join-Path $local 'screenshots\*.png') $shots -Force
