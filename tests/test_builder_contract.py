@@ -140,6 +140,9 @@ def test_lot_uses_cumulative_drain_deleted_statistic(tmp_path: Path):
     fake.objects[bad]["StatDeleted"] = 2990
     fake.objects[builder.event]["SimTime"] = 4212000
     fake.objects[".Models.Model.PC_Beerkezes_10000"]["StatNumOut"] = 10000
+    fake.objects[".Models.Model.Csomagolas.Csomagolas_10perc"]["StatNumOut"] = 7010
+    fake.objects[".Models.Model.Szallitas_Elokeszites.Rakodo1_5perc"]["StatNumOut"] = 4627
+    fake.objects[".Models.Model.Szallitas_Elokeszites.Rakodo2_10perc"]["StatNumOut"] = 2383
     result = builder.run(timeout_s=2)
     assert result["processed"] == 10000
     assert result["good"] == 7010 and result["bad"] == 2990
@@ -189,5 +192,37 @@ def test_all_drains_complete_but_source_short_fails(tmp_path: Path):
     fake.objects[".Models.Model.Minosegellenorzes.Rossz_Termekek"]["StatDeleted"] = 3000
     fake.objects[".Models.Model.PC_Beerkezes_10000"]["StatNumOut"] = 9999
     fake.objects[builder.event]["SimTime"] = 4230000
-    with pytest.raises(RuntimeError, match="nem teljes"):
+    with pytest.raises(RuntimeError, match="ellenőrzés"):
+        builder.run(timeout_s=0.1)
+
+
+def test_unrealistic_simulation_time_is_rejected(tmp_path: Path):
+    import pytest
+    fake = FakePlantSimulation()
+    builder = LiveBuilder(fake, tmp_path)
+    builder.build()
+    fake.objects[".Models.Model.Kiszallitott_JO"]["StatDeleted"] = 7000
+    fake.objects[".Models.Model.Minosegellenorzes.Rossz_Termekek"]["StatDeleted"] = 3000
+    fake.objects[".Models.Model.PC_Beerkezes_10000"]["StatNumOut"] = 10000
+    fake.objects[".Models.Model.Csomagolas.Csomagolas_10perc"]["StatNumOut"] = 7000
+    fake.objects[".Models.Model.Szallitas_Elokeszites.Rakodo1_5perc"]["StatNumOut"] = 4620
+    fake.objects[".Models.Model.Szallitas_Elokeszites.Rakodo2_10perc"]["StatNumOut"] = 2380
+    fake.objects[builder.event]["SimTime"] = 1000  # 7000 * 600 s impossible
+    with pytest.raises(RuntimeError, match="ellenőrzés"):
+        builder.run(timeout_s=0.1)
+
+
+def test_loader_counters_are_checked(tmp_path: Path):
+    import pytest
+    fake = FakePlantSimulation()
+    builder = LiveBuilder(fake, tmp_path)
+    builder.build()
+    fake.objects[".Models.Model.Kiszallitott_JO"]["StatDeleted"] = 7000
+    fake.objects[".Models.Model.Minosegellenorzes.Rossz_Termekek"]["StatDeleted"] = 3000
+    fake.objects[".Models.Model.PC_Beerkezes_10000"]["StatNumOut"] = 10000
+    fake.objects[".Models.Model.Csomagolas.Csomagolas_10perc"]["StatNumOut"] = 7000
+    fake.objects[".Models.Model.Szallitas_Elokeszites.Rakodo1_5perc"]["StatNumOut"] = 6000
+    fake.objects[".Models.Model.Szallitas_Elokeszites.Rakodo2_10perc"]["StatNumOut"] = 1000
+    fake.objects[builder.event]["SimTime"] = 4300000
+    with pytest.raises(RuntimeError, match="ellenőrzés"):
         builder.run(timeout_s=0.1)
