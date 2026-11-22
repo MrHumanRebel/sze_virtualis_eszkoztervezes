@@ -1,47 +1,70 @@
-# Modell- és beadásellenőrzés · Plant Simulation 2404
+# Beadandó — végső követelményellenőrzés
 
-**A cél az eredeti feladatlap 12 pontjának teljesítése.** Az egyetemi kiírásból nem következik, hogy külön jelentést kell beadni: a **Neptun-kód.spp** az előírt leadási fájl.
+**Széchenyi István Egyetem · GKLM_AUTM029 · Siemens Plant Simulation 2404**
 
-## Követelmények
+A kiindulási alap a [változatlan eredeti feladatlap](assignment/PS_beadando_original.pdf). Az elkészült, Neptun-kódra nevezett [**JAXC3C.spp**](../output/JAXC3C.spp) a beadandó. A PDF-ek és képernyőképek ellenőrzési mellékletek, nem az egyetemi rendszerbe beadandó fájlok.
 
-| # | Elvárás | Modellbeállítás | Ellenőrzés |
+## A kiírás mind a 12 pontja
+
+| # | Elvárás | Tényleges modell / eredmény | Státusz |
 |---|---|---|---|
-| 1 | Új 2D modell | Új fő-Frame, `.Models.Model` | Programból létrehozva; Siemensben vizuálisan ellenőrizendő |
-| 2 | 3 külön részmodell saját mappában | `BeadandoModulok`, QA/PACK/SHIP, majd példányosítás | Modellgráf és objektumlétrehozási teszt |
-| 3 | Ellenőrzés 3 perc | 180 s | `ProcTime` visszaolvasás |
-| 4 | 30% rossz termék | 70/30 véletlen elágazás | 2 kimenet; mért selejtarány 28–32% |
-| 5 | Jó és rossz címkézés 20 s | 20–20 s | 2 külön állomás |
-| 6 | PC és csomagolóanyag előkészítése 20 s | 20–20 s | 2 külön bemenet |
-| 7 | Csomagolás 10 perc, 1 PC + 1 csomagolóanyag | Assembly 600 s, 2 bemenet, `MainMU=1`, `Delete MUs` | 2 előd; kimenet egyezzen a kész PC-k számával |
-| 8 | Csomagolási és szállítási adminisztráció | 60–60 s | 2 külön állomás |
-| 9 | Rakodó 1/2: 5 és 10 perc, 66/34 | 300/600 s; kétágú százalékos irányítás | Mért rakodómegoszlás 63–69% / 31–37% |
-| 10 | Kiszállítás 1 perc | 60 s | Külön állomás |
-| 11 | Állomásstatisztika grafikonon | `Allomas_Statisztika` | 11 állomás felvétele; valódi screenshot szükséges |
-| 12 | 10 000 PC teljes átfutási ideje | Source `Number=10000`; 2 Drain `StatDeleted` | Az összes jó + rossz kimenet = 10 000; mért `SimTime` |
+| 1 | Új 2D modell | A fő Frame natív 2D nézete elkészült | Rendben |
+| 2 | Mappa és 3 külön beillesztett modell | `BeadandoModulok` / `QA_Template`, `PACK_Template`, `SHIP_Template`, 3 példány a főmodellben | Rendben |
+| 3 | Minőségellenőrzés: 3 perc | `Ellenorzes_3perc`, `ProcTime=180 s` | Rendben |
+| 4 | Hibás termékek: 30% | 70/30 elágazás; **3000 selejt** / 10 000 | Rendben |
+| 5 | Jó és rossz címkézés: 20–20 s | Két külön `Station` | Rendben |
+| 6 | Számítógép és csomagolóanyag előkészítése: 20–20 s | Két külön `Station` | Rendben |
+| 7 | 1 PC + 1 csomagolóanyag, 10 perc | `AssemblyStation`, `MainMU=1`, két bemenet, `ProcTime=600 s`; **7000 csomagolt PC** | Rendben |
+| 8 | Csomagolási és szállítási adminisztráció: 1–1 perc | Két külön 60 s-os állomás | Rendben |
+| 9 | Rakodó 1: 5 perc, rakodó 2: 10 perc, 66/34% | 300/600 s; **4620 / 2380 PC**, pontosan 66/34% | Rendben |
+| 10 | Kiszállítás: 1 perc | `Kiszallitas_1perc`, 60 s | Rendben |
+| 11 | Állomások statisztikája grafikonon | `Allomas_Statisztika`, 11 állomás, működő Siemens `Resource Statistics` grafikon | Rendben |
+| 12 | Átfutási idő 10 000 beérkező PC-re | 10 000 feldolgozott darab; **4 200 734 s** | Rendben |
 
-**Minden állomásközi szállítás 2 méteres**: 23 külön `Line`, minden szalag ellenőrzött hosszal és pontosan egy be-/kimeneti kapcsolattal.
+A kiírás kifejezetten kérte a munkaállomások közötti **2 méteres szállítószalagokat**. A ténylegesen felépített modellben 23 külön `Conveyor` van, mindegyik `Length=2` paraméterrel, az ellenőrzött 1–1 bemeneti/kimeneti kapcsolatokkal.
 
-## Amit az egyetemi PDF nem ad meg
+## Tényleges Siemens-mérés
 
-A beérkezési időköz és a szalag sebessége nincs előírva. Választott értékeim: 1 PC/s és 1 m/s. A sztochasztikus százalékos elágazások miatt az egyes futások jó/selejt és rakodó darabszámai eltérnek.
+| Mutató | Mért adat |
+|---|---:|
+| Beérkező számítógép | 10 000 |
+| Jó termék | 7 000 |
+| Hibás termék | 3 000 |
+| Csomagolt termék | 7 000 |
+| Rakodó 1 | 4 620 |
+| Rakodó 2 | 2 380 |
+| Teljes tétel átfutása | **4 200 734 s** |
+| Átváltva | **48 nap 14 óra 52 perc 14 másodperc** |
 
-## Ésszerűségi kontroll
+Az átfutási idő életszerű: az egyetlen csomagolóállomás 7000 × 600 s = **4 200 000 s** minimális munkát végez. A teljes idő ennél **734 másodperccel több**, ami a megelőző és követő műveletekkel összhangban van. Ez a **teljes tétel** átfutása, nem egyetlen számítógép átlagos átfutási ideje.
 
-Az egyetlen csomagolóállomás munkadarabonként 600 másodpercet dolgozik. Ha megközelítőleg 7000 jó PC-t csomagolunk, akkor **csak ez az állomás legalább 4 200 000 másodpercet (kb. 48,6 napot)** igényel. Ez *elméleti alsó korlát*, nem a Siemensben mért átfutási idő. A valós futásnál a mérés ennél nem lehet rövidebb.
+## Eredeti Siemens-képernyőképek
 
-## Mi van igazolva, és mi nincs?
+A valódi, fájlszinten és vizuálisan is ellenőrzött 2404-es exportok:
 
-- **Igazolt:** az eredeti PDF bájtra azonos feltöltése; Python CI; a 12 követelmény paraméterezése; a 23 szalag, 46 kapcsolat, 11 állomás és a negatív tesztesetek.
-- **Részben igazolt a felhasználó képe alapján:** Plant Simulation 2404 elindul, COM-vezérléssel új modellt és osztálykönyvtári mappát hoz létre. A korábban hibás Source-attribútum javítva.
-- **Még nem igazolt:** a teljes 10 000 darabos futás valódi 2404 alatt, a végleges NEPTUNKOD.spp megnyitása és öt eredeti Siemens-screenshot. Az offline CI nem helyettesíti ezeket.
+- [Főmodell](../output/screenshots/01_fomodell.png)
+- [Minőségellenőrzés és selejtezés](../output/screenshots/02_minosegellenorzes.png)
+- [Csomagolás, két bemenettel](../output/screenshots/03_csomagolas.png)
+- [Szállítás-előkészítés, két rakodóval](../output/screenshots/04_szallitas_elokeszites.png)
+- [Állomások statisztikai grafikonja](../output/screenshots/05_allomasstatisztika.png)
 
-## Siemens oldali záró ellenőrzés
+A háromoldalas [mérési jegyzőkönyv](../output/Siemens_meresi_jegyzokonyv.pdf) mind az öt képet tartalmazza. A részmodellek a PDF-ben kicsik, ezért az eredeti, teljes felbontású PNG-kből jobban vizsgálhatók a kapcsolatok.
 
-1. A legfrissebb `main` ágon futtasd az `INDITAS.bat` fájlt **Windows + Plant Simulation 2404** alatt.
-2. Az `output/run.log` hibamentes, `config_validation.json` szerint nincs szerkezeti hiba.
-3. A `simulation_result.json` szerint 10 000 input és output, ellenőrzött csomagolás, két rakodó és valós szimulációs idő.
-4. Készüljön el `output/NEPTUNKOD.spp`, az öt `output/screenshots` PNG, és a mért PDF-jegyzőkönyv.
-5. Nyisd meg **újra** a `.spp`-t Siemensben. Ellenőrizd az állomások elhelyezkedését, a százalékos ágakat, a Chartot és az átfutási időt.
-6. Ha mindez rendben van, a Git-klónból futtatható a `tools/publish_results.ps1`. A tanulmányi rendszerbe a kiírás szerinti **egyetlen .spp fájl** kell.
+## Fájl- és mérésellenőrzés
 
-A hiányzó valós Siemens-futást nem jelölöm sikeresnek.
+A feltöltött bináris fájlokkal külön [GitHub Actions-audit](https://github.com/MrHumanRebel/sze_virtualis_eszkoztervezes/actions/workflows/submission-audit.yml) készült:
+
+- **61/61 fájlszintű ellenőrzés sikeres**, 0 hiba.
+- Az eredeti kétoldalas PDF SHA256-azonosítója egyezik a kapott feladatlapéval.
+- A 335 872 bájtos `.spp` OLE Compound File állományként strukturálisan olvasható.
+- Az öt PNG mind létezik, valós képtartalma van, a SHA256-értékük egyezik a manifesttel.
+- A mérési PDF 3 oldalas, 5 beágyazott képet tartalmaz, az SPP nevével és a mért átfutási idővel.
+- A teljes tétel számlálói, selejtaránya, csomagolása, rakodóelosztása és időkorlátja megfelelnek a kiírásnak.
+
+**Ami ettől még nem bizonyított automatikusan:** az SPP utólagos újranyitása és egy ismételt interaktív futtatás egy Windowsos Plant Simulation 2404-példányban. Az eredeti futási napló és a képek valós Siemens-futtatásból származnak; a fájlszintű ellenőrzés nem helyettesíti az újranyitási próbát.
+
+## Beadás
+
+A tanulmányi rendszerbe a **[JAXC3C.spp](../output/JAXC3C.spp)** fájlt töltsd fel — sem a ZIP, sem a PDF, sem a `JAXC3C.spp.previous` nem a beadandó.
+
+Az eredeti PDF nem szabott meg beérkezési időközt vagy szalagsebességet. A modell a beérkezéseket 1 s-os időközzel, a szalagokat 1 m/s-os sebességgel futtatja. Ezek külön feltüntetett modellezési feltevések.

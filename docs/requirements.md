@@ -32,5 +32,9 @@ A minden állomás közötti szállítás 2 méteres szállítószalagon törté
 
 ## Fájlformátum
 
-A feladat kizárólag Neptun-kód.spp leadását kéri. A repó szöveges
-generátort tartalmaz, nem előre érvényesített Plant Simulation modellt.
+A feladat kizárólag Neptun-kód.spp leadását kéri. A repóban már
+megtalálható a tényleges Siemensben elkészült és lefuttatott
+[**JAXC3C.spp**](../output/JAXC3C.spp) modell, az öt
+[eredeti képernyőkép](../output/screenshots), a
+[mérési eredmény](../output/simulation_result.json) és a
+[12 pontos audit](audit_2404.md).

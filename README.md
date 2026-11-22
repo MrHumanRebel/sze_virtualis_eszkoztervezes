@@ -57,9 +57,25 @@ Ha az SPP újranyitásakor a Siemens nullázta a futási statisztikát,
 az ellenőrzés hibával leáll. Akkor a normál `INDITAS.bat` futtatásra
 van szükség.
 
-## Bizonyítás és feltöltés
+## Ellenőrzött beadandó
 
-Amíg nincs sikeres Siemens-futtatás, **nincs igazolt beadandó .spp és nincs valódi screenshot** a repóban. Nem helyettesítem ezeket látványtervekkel.
+A 2026. november 22-i Siemens Plant Simulation 2404-futtatás kimenete már fent van:
+**[JAXC3C.spp](output/JAXC3C.spp)** · [Mérési jegyzőkönyv](output/Siemens_meresi_jegyzokonyv.pdf) · [5 eredeti Siemens-kép](output/screenshots) · [teljes 12 pontos audit](docs/audit_2404.md).
+
+A feltöltött eredményben **10 000 PC**, ebből **7 000 jó és 3 000 selejt**.
+A rakodó 1 / rakodó 2 darabszáma **4 620 / 2 380**; a teljes mért
+átfutási idő **4 200 734 s (48 nap, 14 óra, 52 perc, 14 másodperc)**.
+
+A külön bináris fájlaudit az eredeti PDF-et, a Siemens SPP
+konténerstruktúráját, a bemeneti/kimeneti számlálókat, a grafikonképeket,
+a PDF-ben beágyazott képeket és a SHA256-értékeket ellenőrzi.
+**61/61 ellenőrzés sikeres.** A [GitHub Actions-jegyzőkönyv](https://github.com/MrHumanRebel/sze_virtualis_eszkoztervezes/actions/workflows/submission-audit.yml) visszakereshető.
+
+Az újranyitásos, interaktív Windowsos ellenőrzést a fájlaudit nem helyettesíti:
+a `.spp`-t érdemes Plant Simulation 2404-ben ismét megnyitni és a
+három beágyazott Frame-et átnézni.
+
+## Bizonyítás és feltöltés
 
 Sikeres helyi futás után az ellenőrzött állományok feltöltése:
 
