@@ -39,3 +39,14 @@ jobs:
             output_audit.json
             output_audit.md
           if-no-files-found: warn
+
+      - name: Archive exact uploaded files for visual inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: actual-siemens-evidence
+          path: |
+            output/JAXC3C.spp
+            output/Siemens_meresi_jegyzokonyv.pdf
+            output/screenshots/*.png
+          if-no-files-found: error
