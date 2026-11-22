@@ -97,3 +97,29 @@ EndTime-ot. A 12 000 000 másodperces végidőt visszaolvassa és ellenőrzi,
 mielőtt folytatná a modellépítést. A StartStat beállítás 0 s marad.
 
 A hiba a 2026-11-22 19:57-es, valódi Siemens 2404 COM-naplóban szerepelt.
+
+
+## Futás 0 / 10 000 kimenettel, normál szimulációs sebességen
+
+A naplóban 2026-11-22 20:00:02-kor a valódi Siemens-szimuláció
+sikeresen elindult, de az első 30 valódi másodpercben 0 kimenetet adott.
+Ez önmagában **nem hiba**: az első ellenőrzés 180 szimulációs
+másodpercet vesz igénybe, majd 20 másodperc címkézés következik.
+A csomagolás további 600 másodperc.
+
+Az EventController `start` alapértelmezett sebessége megtarthatja
+a valós időskálázást, ezért a 10 000 darabos futás rendkívül sokáig tarthat.
+Az új indítás:
+
+`EventController.start(false,false)`
+
+Ez a Siemens hivatalos SimTalk paraméterezése: nincs animáció
+(`WithAnimation=false`), nincs real-time korlátozás
+(`RealTime=false`). A modell teljes szimulációs idejét nem rövidíti:
+csak a számítás faliórás végrehajtását gyorsítja.
+
+Az `output/progress.json` minden 15 valódi másodpercben frissül, és
+külön mutatja a szimulációs időt, a forrás/kontroll/címkézés/csomagolás
+statisztikáit és a két kimenetet. Ha 7200 szimulációs másodperc
+elteltével a forrás vagy a QC biztosan nem halad, a program
+figyelmeztetéssel leáll, és a diagnosztika alapján javítható.

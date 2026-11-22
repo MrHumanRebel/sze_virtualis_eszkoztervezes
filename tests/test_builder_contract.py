@@ -11,6 +11,7 @@ class FakePlantSimulation:
         self.objects = {}
         self.connections = []
         self.chart_sources = []
+        self.commands = []
 
     def NewModel(self):
         self.objects[".Models.Model"] = {"Name": "Model"}
@@ -31,6 +32,7 @@ class FakePlantSimulation:
         return self.objects[parent][key]
 
     def ExecuteSimTalk(self, code: str):
+        self.commands.append(code)
         if ".Models.createFolder" in code:
             self.objects[".Models.BeadandoModulok"] = {"Name": "BeadandoModulok"}
             return
@@ -96,7 +98,7 @@ class FakePlantSimulation:
             self.chart_sources.append(target)
             return
 
-        if code.endswith((".reset", ".start", ".stop")):
+        if code.endswith((".reset", ".stop")) or code.endswith(".start(false,false)"):
             return
         raise AssertionError("Unexpected SimTalk statement: " + code)
 
@@ -159,6 +161,14 @@ def test_lot_uses_cumulative_drain_deleted_statistic(tmp_path: Path):
     assert result["good"] == 7010 and result["bad"] == 2990
     assert result["complete"] is True
     assert result["lot_lead_time_seconds"] == 4212000
+    assert builder.event + ".start(false,false)" in fake.commands
+    assert builder.event + ".start" not in fake.commands
+    progress = (tmp_path / "progress.json")
+    assert progress.is_file()
+    import json
+    data = json.loads(progress.read_text(encoding="utf-8"))
+    assert data["source_output"] == 10000
+    assert data["processed_total"] == 10000
 
 
 def test_unconnected_line_fails_strict_validation(tmp_path: Path):
@@ -334,3 +344,26 @@ def test_event_controller_end_time_readback_mismatch_is_fatal(tmp_path: Path):
 
     with pytest.raises(RuntimeError, match="végidejét"):
         LiveBuilder(WrongEndFake(), tmp_path).build()
+
+
+def test_progress_probe_does_not_forge_missing_metrics(tmp_path: Path):
+    fake = FakePlantSimulation()
+    builder = LiveBuilder(fake, tmp_path)
+    builder.build()
+    snapshot = builder.progress_snapshot()
+    assert snapshot["source_output"] is None
+    assert snapshot["qa_processed"] is None
+    assert snapshot["delivered"] is None
+
+
+def test_start_requires_explicit_fast_mode(tmp_path: Path):
+    fake = FakePlantSimulation()
+    builder = LiveBuilder(fake, tmp_path)
+    builder.build()
+    fake.objects[".Models.Model.Kiszallitott_JO"]["StatDeleted"] = 0
+    fake.objects[".Models.Model.Minosegellenorzes.Rossz_Termekek"]["StatDeleted"] = 0
+    fake.objects[builder.event]["SimTime"] = 120
+    import pytest
+    with pytest.raises(RuntimeError, match="ellenőrzés"):
+        builder.run(timeout_s=0)
+    assert builder.event + ".start(false,false)" in fake.commands

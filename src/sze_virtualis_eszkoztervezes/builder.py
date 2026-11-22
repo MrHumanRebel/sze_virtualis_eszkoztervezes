@@ -483,9 +483,45 @@ class LiveBuilder:
         LOG.info("SPP mentve: %s (%s byte)", dest, dest.stat().st_size)
         return dest
 
+    def progress_snapshot(self) -> dict:
+        """Read a few real Siemens counters to distinguish progress from blockage.
+
+        This diagnostic does not change the simulation or claim completion.
+        Missing statistics are explicitly recorded as null, not invented as 0.
+        """
+        def optional(path: str):
+            try:
+                return self.get(path)
+            except Exception as exc:
+                LOG.debug("Progress probe unavailable %s: %s", path, exc)
+                return None
+
+        return {
+            "sim_time_seconds": optional(self.event + ".SimTime"),
+            "controller_running": optional(self.event + ".IsRunning"),
+            "source_output": optional(self.root + ".PC_Beerkezes_10000.StatNumOut"),
+            "qa_processed": optional(
+                self.root + ".Minosegellenorzes.Ellenorzes_3perc.StatNumOut"
+            ),
+            "good_labels": optional(
+                self.root + ".Minosegellenorzes.Cimke_JO_20mp.StatNumOut"
+            ),
+            "defective_drain": optional(
+                self.root + ".Minosegellenorzes.Rossz_Termekek.StatDeleted"
+            ),
+            "packaged": optional(
+                self.root + ".Csomagolas.Csomagolas_10perc.StatNumOut"
+            ),
+            "delivered": optional(self.root + ".Kiszallitott_JO.StatDeleted"),
+        }
+
     def run(self, timeout_s: int = 900) -> dict:
         self.execute(self.event + ".reset", "szimuláció reset")
-        self.execute(self.event + ".start", "szimuláció start")
+        # Explicit Siemens API: start(WithAnimation=false, RealTime=false).
+        # Without this, 4.2 million simulated seconds would take days in
+        # real-time mode; the first QA decision alone takes 180 seconds.
+        self.execute(self.event + ".start(false,false)",
+                     "szimuláció maximum sebességgel, animáció nélkül")
         good_path = self.root + ".Kiszallitott_JO"
         bad_path = self.root + ".Minosegellenorzes.Rossz_Termekek"
         started = time.monotonic()
@@ -497,8 +533,39 @@ class LiveBuilder:
             bad = int(self.get(bad_path + ".StatDeleted"))
             elapsed = int(time.monotonic() - started)
             if elapsed // 15 != last_log:
-                LOG.info("Kimenet %s jó, %s selejt, összesen %s / 10000",
-                         good, bad, good + bad)
+                snapshot = self.progress_snapshot()
+                snapshot.update({
+                    "wall_time_elapsed_seconds": elapsed,
+                    "good_at_drain": good,
+                    "bad_at_drain": bad,
+                    "processed_total": good + bad,
+                })
+                self.write_json("progress.json", snapshot)
+                LOG.info(
+                    "Szimuláció t=%s s; forrás=%s; QC=%s; címkézett jó=%s; "
+                    "csomagolt=%s; kimenet=%s jó + %s selejt / 10000",
+                    snapshot["sim_time_seconds"], snapshot["source_output"],
+                    snapshot["qa_processed"], snapshot["good_labels"],
+                    snapshot["packaged"], good, bad
+                )
+                # First outgoing defective products take >200 simulated
+                # seconds. No output at t=117 s is NOT a deadlock.
+                # At >7200 simulated seconds there must have been progress.
+                simtime = snapshot["sim_time_seconds"]
+                src_count = snapshot["source_output"]
+                qa_count = snapshot["qa_processed"]
+                if (
+                    good + bad == 0 and isinstance(simtime, (int, float))
+                    and simtime >= 7200
+                    and src_count is not None and qa_count is not None
+                ):
+                    if int(src_count) == 0 or int(qa_count) == 0:
+                        self.execute(self.event + ".stop", "elakadás miatt leállítás")
+                        raise RuntimeError(
+                            "Anyagáram-elakadás: több mint 7200 szimulációs "
+                            "másodperc eltelt, de a forrás/QC számláló nem halad. "
+                            "Részletek: output/progress.json"
+                        )
                 last_log = elapsed // 15
             if good + bad >= 10000:
                 stop_reason = "complete"
