@@ -24,6 +24,8 @@ class FakePlantSimulation:
             return sum(dst == parent for src, dst in self.connections)
         if key == "NumSucc":
             return sum(src == parent for src, dst in self.connections)
+        if key == "AssemblyTableMode":
+            raise KeyError("Unknown identifier 'AssemblyTableMode' (PS 2404)")
         return self.objects[parent][key]
 
     def ExecuteSimTalk(self, code: str):
@@ -65,6 +67,8 @@ class FakePlantSimulation:
             assert path in self.objects, f"Unknown object: {path}"
             if key == "Amount":
                 raise AssertionError("Plant Simulation 2404: Source.Amount is not a valid attribute")
+            if key == "AssemblyTableMode":
+                raise AssertionError("Plant Simulation 2404: Unknown identifier AssemblyTableMode")
             raw = value.rstrip(";")
             if raw.startswith('"') and raw.endswith('"'):
                 parsed = raw[1:-1]
@@ -111,9 +115,10 @@ def test_full_model_builds_on_fake_com(tmp_path: Path):
     assert fake.objects[".Models.BeadandoModulok.SHIP_Template.Rakodo_66_34"][
         "ExitStrategyPercentageValues"
     ] == "[66,34]"
-    assert fake.objects[".Models.BeadandoModulok.PACK_Template.Csomagolas_10perc"][
-        "AssemblyMode"
-    ] == "Delete MUs"
+    assembly = fake.objects[".Models.BeadandoModulok.PACK_Template.Csomagolas_10perc"]
+    assert assembly["AssemblyMode"] == "Delete MUs"
+    assert assembly["PartListMode"] == "None"
+    assert builder.assembly_table_attribute == "PartListMode"
     assert (tmp_path / "config_validation.json").is_file()
     for belt in builder.conveyors:
         assert fake.GetValue(belt + ".NumPred") == 1
@@ -226,3 +231,47 @@ def test_loader_counters_are_checked(tmp_path: Path):
     fake.objects[builder.event]["SimTime"] = 4300000
     with pytest.raises(RuntimeError, match="ellenőrzés"):
         builder.run(timeout_s=0.1)
+
+
+def test_assembly_mode_supports_newer_attribute_name(tmp_path: Path):
+    """New installations exposing AssemblyTableMode must remain compatible."""
+    class NewModeFake(FakePlantSimulation):
+        def GetValue(self, expression: str):
+            if expression.endswith(".PartListMode"):
+                raise KeyError("Unknown identifier 'PartListMode'")
+            if expression.endswith(".AssemblyTableMode"):
+                path = expression.rsplit(".", 1)[0]
+                return self.objects[path].get("AssemblyTableMode")
+            return super().GetValue(expression)
+
+        def ExecuteSimTalk(self, code: str):
+            if ".PartListMode :=" in code:
+                raise ValueError("Unknown identifier 'PartListMode'")
+            # Bypass the 2404-only rejection of AssemblyTableMode.
+            if ".AssemblyTableMode :=" in code:
+                path, value = code.split(".AssemblyTableMode := ", 1)
+                self.objects[path]["AssemblyTableMode"] = value.strip('"')
+                return
+            return super().ExecuteSimTalk(code)
+
+    fake = NewModeFake()
+    builder = LiveBuilder(fake, tmp_path)
+    builder.build()
+    assert builder.assembly_table_attribute == "AssemblyTableMode"
+    assert fake.objects[".Models.BeadandoModulok.PACK_Template.Csomagolas_10perc"][
+        "AssemblyTableMode"
+    ] == "None"
+
+
+def test_both_assembly_mode_attributes_missing_is_fatal(tmp_path: Path):
+    import pytest
+
+    class UnsupportedFake(FakePlantSimulation):
+        def ExecuteSimTalk(self, code: str):
+            if ".PartListMode :=" in code or ".AssemblyTableMode :=" in code:
+                raise ValueError("unsupported assembly table mode")
+            return super().ExecuteSimTalk(code)
+
+    builder = LiveBuilder(UnsupportedFake(), tmp_path)
+    with pytest.raises(RuntimeError, match="None/1:1"):
+        builder.build()

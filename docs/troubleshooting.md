@@ -70,3 +70,19 @@ A Download ZIP nem Git-klón. A helyi modellgenerálás ZIP-ből is működik,
 de a feltöltéshez `git clone` + GitHub-hitelesítés kell. A kész `output`
 mappát át lehet másolni a friss Git-klónba, majd abból indítani a
 `tools/publish_results.ps1` szkriptet.
+
+
+## Plant Simulation 2404: `Unknown identifier 'AssemblyTableMode'`
+
+A 2404-es COM szerver nem ismeri a `AssemblyTableMode` nevet. A régebbi
+SimTalk név: **`PartListMode`**. Az új generátor előbb a `PartListMode`
+attribútumot próbálja, szükség esetén az `AssemblyTableMode`-ot.
+Minden esetben visszaolvassa, hogy a modellben ténylegesen `None` van-e.
+Ez a mód mindkét elődről egy-egy elemet vár; a `MainMU=1` a PC,
+a második bemenet a csomagolóanyag. Hibás visszaolvasásnál a program
+nem menti jóvá a modellt.
+
+A 2404-es logban szintén látható `SingleProc`, `Line` és `Assembly`
+elnevezések a 2404-ben nem létező próbálkozások voltak, és a generátor
+átváltott `Station`, `Conveyor`, `AssemblyStation` típusokra. Ezek
+most elsődlegesen kerülnek kipróbálásra; így a napló rövidebb és tisztább.

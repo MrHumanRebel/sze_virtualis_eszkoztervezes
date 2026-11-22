@@ -22,12 +22,13 @@ LOG = logging.getLogger("sze_plant")
 CLASSES = {
     "frame": (".MaterialFlow.Frame", ".Models.Model"),
     "source": (".MaterialFlow.Source",),
-    "station": (".MaterialFlow.SingleProc", ".MaterialFlow.Station"),
-    "split": (".MaterialFlow.SingleProc", ".MaterialFlow.Station"),
-    "assembly": (".MaterialFlow.Assembly", ".MaterialFlow.AssemblyStation"),
+    # Observed in the user's genuine Plant Simulation 2404 COM log.
+    "station": (".MaterialFlow.Station", ".MaterialFlow.SingleProc"),
+    "split": (".MaterialFlow.Station", ".MaterialFlow.SingleProc"),
+    "assembly": (".MaterialFlow.AssemblyStation", ".MaterialFlow.Assembly"),
     "interface": (".MaterialFlow.Interface",),
     "drain": (".MaterialFlow.Drain",),
-    "conveyor": (".MaterialFlow.Line", ".MaterialFlow.Conveyor"),
+    "conveyor": (".MaterialFlow.Conveyor", ".MaterialFlow.Line"),
     "chart": ('str_to_obj(".UserInterface.Chart")',),
     "controller": (".Tools.EventController", ".MaterialFlow.EventController"),
 }
@@ -94,6 +95,7 @@ class LiveBuilder:
         self.stations: list[tuple[str, int]] = []
         self.splits: list[tuple[str, tuple[int, int]]] = []
         self.event = ""
+        self.assembly_table_attribute = ""
 
     def execute(self, code: str, description: str = ""):
         try:
@@ -192,6 +194,35 @@ class LiveBuilder:
             literal = str(value)
         self.execute(obj + "." + attribute + " := " + literal, obj + "." + attribute)
 
+    def configure_assembly(self, obj: str) -> None:
+        """Set one main MU + one part without relying on a single PS version.
+
+        The Plant Simulation 2404 COM log rejects AssemblyTableMode. Older
+        Plant Simulation versions expose the same selection as PartListMode.
+        Both names must be validated by Siemens read-back, not just a mock.
+        """
+        errors = []
+        for attr in ("PartListMode", "AssemblyTableMode"):
+            try:
+                self.set_attr(obj, attr, "None")
+                actual = str(self.get(obj + "." + attr)).strip()
+                if actual.casefold() != "none":
+                    raise RuntimeError("unexpected read-back: " + repr(actual))
+                self.assembly_table_attribute = attr
+                LOG.info("Assembly table mode: %s.None (read-back OK)", attr)
+                break
+            except Exception as exc:
+                errors.append(attr + ": " + str(exc))
+        else:
+            raise RuntimeError(
+                "Az AssemblyStation None/1:1 módját nem sikerült beállítani "
+                "a Plant Simulation verzióban: " + " | ".join(errors)
+            )
+        # Connection 1 supplies the PC, connection 2 the packaging material.
+        self.set_attr(obj, "MainMU", 1)
+        self.set_attr(obj, "AssemblyMode", "Delete MUs")
+        self.set_attr(obj, "ExitingMU", "Main MU")
+
     def configure_source(self, obj: str, node: Node):
         """Source quantity is Number, NOT the GUI-labelled Amount (2404)."""
         self.set_attr(obj, "TimeOfGeneration", "Interval Adjustable")
@@ -251,10 +282,7 @@ class LiveBuilder:
             if node.kind == "assembly":
                 # Two incoming connections, one from the PC and one from the box.
                 # Main MU is incoming connection #1. Box parts get consumed.
-                self.set_attr(result, "AssemblyTableMode", "None")
-                self.set_attr(result, "MainMU", 1)
-                self.set_attr(result, "AssemblyMode", "Delete MUs")
-                self.set_attr(result, "ExitingMU", "Main MU")
+                self.configure_assembly(result)
         return frame_path
 
     def build(self, template: Path | None = None):
@@ -355,8 +383,11 @@ class LiveBuilder:
         try:
             if int(self.get(assembly_path + ".NumPred")) != 2:
                 errors.append(assembly_path + ": 2 inputs required")
-            for attr, expected in (("AssemblyTableMode", "None"),
-                                   ("MainMU", 1),
+            if not self.assembly_table_attribute:
+                errors.append(assembly_path + ": assembly table mode unknown")
+            elif str(self.get(assembly_path + "." + self.assembly_table_attribute)).strip().casefold() != "none":
+                errors.append(assembly_path + ": assembly table mode is not None")
+            for attr, expected in (("MainMU", 1),
                                    ("AssemblyMode", "Delete MUs"),
                                    ("ExitingMU", "Main MU")):
                 actual = self.get(assembly_path + "." + attr)
@@ -387,6 +418,7 @@ class LiveBuilder:
             "conveyors": len(self.conveyors),
             "stations": len(self.stations),
             "percentage_splits": len(self.splits),
+            "assembly_mode_attribute": self.assembly_table_attribute,
             "errors": errors,
             "siemens_live_verification": True
         }
