@@ -1,0 +1,41 @@
+name: Uploaded submission audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "output/**"
+      - "docs/assignment/PS_beadando_original.pdf"
+      - "tools/audit_submission.py"
+      - ".github/workflows/submission-audit.yml"
+  workflow_dispatch:
+
+jobs:
+  forensic-file-audit:
+    name: SPP + PNG + PDF / actual uploaded files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install file validation libraries
+        run: python -m pip install pillow pypdf olefile
+      - name: Verify binary files and measurements
+        run: python tools/audit_submission.py
+      - name: Attach review to GitHub run
+        if: always()
+        shell: bash
+        run: |
+          if [ -f output_audit.md ]; then
+            cat output_audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Save forensic audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-upload-audit
+          path: |
+            output_audit.json
+            output_audit.md
+          if-no-files-found: warn
