@@ -43,7 +43,13 @@ def capture(builder, spp_path: Path) -> dict:
     images={}
     for filename,obj,width,height in sources:
         output=(screenshots/filename).resolve()
-        cmd=obj+".copyBitmapToFile("+json.dumps(str(output),ensure_ascii=True)+","+str(width)+","+str(height)+")"
+        args = (
+            [json.dumps(str(output), ensure_ascii=True), str(width), str(height)]
+            if filename == "05_allomasstatisztika.png"
+            else [json.dumps(str(output), ensure_ascii=True), "0", "0",
+                  str(width), str(height)]
+        )
+        cmd = obj + ".copyBitmapToFile(" + ",".join(args) + ")"
         try:
             builder.execute(cmd,"Siemens screenshot: "+filename)
             if not output.is_file() or output.stat().st_size<1000:
