@@ -43,3 +43,22 @@ Az egyetemi feladatra **csak a Neptun-kódod.spp** adandó be. Az offline
 tesztek zöld státusza önmagában nem elég: a helyi Siemens futtatás
 sikerét, az állomásstatisztikai Chartot és a modell teljes folyását
 is ellenőrizni kell. Részlegesen generált SPP-t ne adj be.
+
+
+## Plant Simulation 2404 / Unknown identifier Amount
+
+A Source felületén a mező neve Amount, de SimTalkban a hozzá tartozó
+attribútum **Number**. A javított kód előbb beállítja az Interval Adjustable
+módot, majd a Number=10000, Stop=0 és Interval=1 s értékeket.
+
+## Drain kimeneti számláló
+
+A Drain törli a beérkező darabokat, ezért a NumMU (pillanatnyi tartalom)
+nem alkalmas a teljes darabszám mérésére. A kumulatív érték a
+**StatDeleted**. Az ellenőrzés két Drain számlálóját összegzi.
+
+## Frissítés
+
+A régi ZIP nem frissül: töltsd le újra a main ágat, vagy a repo
+mappájában futtasd a git pull parancsot. A generátor új modellt hoz létre,
+nem a korábbi félkész Frame-en folytatja a munkát.

@@ -192,6 +192,15 @@ class LiveBuilder:
             literal = str(value)
         self.execute(obj + "." + attribute + " := " + literal, obj + "." + attribute)
 
+    def configure_source(self, obj: str, node: Node):
+        """Source quantity is Number, NOT the GUI-labelled Amount (2404)."""
+        self.set_attr(obj, "TimeOfGeneration", "Interval Adjustable")
+        self.set_attr(obj, "Start", 0)
+        self.set_attr(obj, "Stop", 0)
+        self.set_attr(obj, "Interval", node.interval)
+        self.set_attr(obj, "Number", node.amount)
+        LOG.info("Forras: %s / %s darab / %s mp", obj, node.amount, node.interval)
+
     def create_folder(self):
         self.execute(
             'var folder : object; folder := .Models.createFolder; '
@@ -213,8 +222,7 @@ class LiveBuilder:
                 result = self.create(node.kind, frame_path, node)
             self.paths[frame.name][node.name] = result
             if node.kind == "source":
-                self.set_attr(result, "Amount", node.amount)
-                self.set_attr(result, "Interval", node.interval)
+                self.configure_source(result, node)
             if node.kind in ("station", "assembly", "split"):
                 self.set_attr(result, "ProcTime", node.seconds)
                 if node.kind != "split":
@@ -266,8 +274,7 @@ class LiveBuilder:
                 result = self.create(node.kind, self.root, node)
             self.paths[main.name][node.name] = result
             if node.kind == "source":
-                self.set_attr(result, "Amount", node.amount)
-                self.set_attr(result, "Interval", node.interval)
+                self.configure_source(result, node)
         for edge in main.edges:
             belt_node = Node("CV_" + edge.name, "conveyor", edge.x, edge.y)
             belt = self.create("conveyor", self.root, belt_node)
@@ -337,9 +344,16 @@ class LiveBuilder:
             except Exception as exc:
                 errors.append(path + ": stratégia visszaolvasása: " + str(exc))
         try:
-            incoming = int(self.get(self.root + ".PC_Beerkezes_10000.Amount"))
-            if incoming != 10000:
-                errors.append("PC forrás: " + str(incoming))
+            for source in (
+                self.root + ".PC_Beerkezes_10000",
+                self.folder + ".PACK_Template.Csomagoloanyag_Forras",
+            ):
+                incoming = int(self.get(source + ".Number"))
+                if incoming != 10000:
+                    errors.append(source + ": Number=" + str(incoming))
+                mode = str(self.get(source + ".TimeOfGeneration")).lower()
+                if "interval" not in mode:
+                    errors.append(source + ": Interval Adjustable hiányzik")
         except Exception as exc:
             errors.append("PC forrás visszaolvasása: " + str(exc))
         audit = {
@@ -386,8 +400,8 @@ class LiveBuilder:
         last_log = -1
         stop_reason = "timeout"
         while time.monotonic() - started < timeout_s:
-            good = int(self.get(good_path + ".NumMU"))
-            bad = int(self.get(bad_path + ".NumMU"))
+            good = int(self.get(good_path + ".StatDeleted"))
+            bad = int(self.get(bad_path + ".StatDeleted"))
             elapsed = int(time.monotonic() - started)
             if elapsed // 15 != last_log:
                 LOG.info("Kimenet %s jó, %s selejt, összesen %s / 10000",

@@ -59,6 +59,8 @@ class FakePlantSimulation:
         if assignment:
             path, key, value = assignment.groups()
             assert path in self.objects, f"Unknown object: {path}"
+            if key == "Amount":
+                raise AssertionError("Plant Simulation 2404: Source.Amount is not a valid attribute")
             raw = value.rstrip(";")
             if raw.startswith('"') and raw.endswith('"'):
                 parsed = raw[1:-1]
@@ -82,6 +84,8 @@ class FakePlantSimulation:
             self.chart_sources.append(target)
             return
 
+        if code.endswith((".reset", ".start", ".stop")):
+            return
         raise AssertionError("Unexpected SimTalk statement: " + code)
 
 
@@ -107,3 +111,29 @@ def test_full_model_builds_on_fake_com(tmp_path: Path):
         "AssemblyMode"
     ] == "Delete MUs"
     assert (tmp_path / "config_validation.json").is_file()
+    for source in (
+        ".Models.Model.PC_Beerkezes_10000",
+        ".Models.BeadandoModulok.PACK_Template.Csomagoloanyag_Forras",
+    ):
+        assert fake.objects[source]["Number"] == 10000
+        assert fake.objects[source]["TimeOfGeneration"] == "Interval Adjustable"
+        assert fake.objects[source]["Stop"] == 0
+        assert fake.objects[source]["Interval"] == 1
+
+
+def test_lot_uses_cumulative_drain_deleted_statistic(tmp_path: Path):
+    fake = FakePlantSimulation()
+    builder = LiveBuilder(fake, tmp_path)
+    builder.build()
+    good = ".Models.Model.Kiszallitott_JO"
+    bad = ".Models.Model.Minosegellenorzes.Rossz_Termekek"
+    fake.objects[good]["NumMU"] = 0
+    fake.objects[bad]["NumMU"] = 0
+    fake.objects[good]["StatDeleted"] = 7010
+    fake.objects[bad]["StatDeleted"] = 2990
+    fake.objects[builder.event]["SimTime"] = 4212000
+    result = builder.run(timeout_s=2)
+    assert result["processed"] == 10000
+    assert result["good"] == 7010 and result["bad"] == 2990
+    assert result["complete"] is True
+    assert result["lot_lead_time_seconds"] == 4212000
