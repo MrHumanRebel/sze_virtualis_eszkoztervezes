@@ -30,7 +30,7 @@ class DummySiemensExporter:
         obj, args = command.split(method, 1)
         assert args.endswith(")")
         path_argument, *numbers = args[:-1].split(",")
-        assert len(numbers) == (3 if obj.endswith("Allomas_Statisztika") else 4)
+        assert len(numbers) == (2 if obj.endswith("Allomas_Statisztika") else 4)
         if obj.endswith("Allomas_Statisztika"):
             assert numbers == ["1500", "900"]
         else:
