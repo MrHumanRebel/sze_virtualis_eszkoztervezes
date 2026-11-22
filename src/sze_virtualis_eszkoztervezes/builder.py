@@ -557,15 +557,19 @@ class LiveBuilder:
                 if (
                     good + bad == 0 and isinstance(simtime, (int, float))
                     and simtime >= 7200
-                    and src_count is not None and qa_count is not None
                 ):
-                    if int(src_count) == 0 or int(qa_count) == 0:
-                        self.execute(self.event + ".stop", "elakadás miatt leállítás")
-                        raise RuntimeError(
-                            "Anyagáram-elakadás: több mint 7200 szimulációs "
-                            "másodperc eltelt, de a forrás/QC számláló nem halad. "
-                            "Részletek: output/progress.json"
-                        )
+                    self.execute(self.event + ".stop", "elakadás miatt leállítás")
+                    stage = (
+                        "forrás" if src_count == 0 else
+                        "minőségellenőrzés" if qa_count == 0 else
+                        "részmodellek közötti anyagáram / további állomások"
+                    )
+                    raise RuntimeError(
+                        "Anyagáram-elakadás gyanúja: 7200 szimulációs másodperc "
+                        "után még nincs kész vagy selejt kimenet. "
+                        "Utoljára ellenőrizendő: " + stage
+                        + ". Részletes számlálók: output/progress.json"
+                    )
                 last_log = elapsed // 15
             if good + bad >= 10000:
                 stop_reason = "complete"
