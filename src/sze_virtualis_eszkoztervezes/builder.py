@@ -451,7 +451,19 @@ class LiveBuilder:
         except Exception:
             simtime = None
         ratio = bad / (good + bad) if good + bad else None
+        try:
+            packed = int(self.get(self.root + ".Csomagolas.Csomagolas_10perc.StatNumOut"))
+            loader1 = int(self.get(self.root + ".Szallitas_Elokeszites.Rakodo1_5perc.StatNumOut"))
+            loader2 = int(self.get(self.root + ".Szallitas_Elokeszites.Rakodo2_10perc.StatNumOut"))
+        except Exception as exc:
+            LOG.error("Állomás-kimeneti statisztika nem olvasható: %s", exc)
+            packed = loader1 = loader2 = None
+        actual_loader_share = (loader1 / (loader1 + loader2)
+                               if loader1 is not None and loader2 is not None
+                               and loader1 + loader2 else None)
         completed = good + bad == 10000
+        lot_time_valid = (isinstance(simtime, (int, float))
+                          and packed is not None and simtime >= packed * 600)
         try:
             created_input = int(self.get(self.root + ".PC_Beerkezes_10000.StatNumOut"))
         except Exception:
@@ -462,6 +474,13 @@ class LiveBuilder:
             "bad": bad,
             "processed": good + bad,
             "source_output_count": created_input,
+            "packed": packed,
+            "loaded_at_station_1": loader1,
+            "loaded_at_station_2": loader2,
+            "station_1_actual_share": actual_loader_share,
+            "theoretical_minimum_pack_time_seconds": (
+                packed * 600 if packed is not None else None),
+            "lot_time_at_least_pack_time": lot_time_valid,
             "defect_ratio": ratio,
             "lot_lead_time_seconds": simtime,
             "lot_lead_time_hours": (
@@ -472,14 +491,20 @@ class LiveBuilder:
             "pass_quantity_and_quality_tolerance": (
                 completed and created_input == 10000 and ratio is not None
                 and abs(ratio - 0.30) <= 0.02
+                and packed == good and loader1 is not None and loader2 is not None
+                and loader1 + loader2 == good
+                and actual_loader_share is not None
+                and abs(actual_loader_share - 0.66) <= 0.03
+                and lot_time_valid
             ),
             "note": "Batch lead time is not per-unit mean throughput time."
         }
         self.write_json("simulation_result.json", report)
         if not report["pass_quantity_and_quality_tolerance"]:
             raise RuntimeError(
-                "A 10 000 darabos Siemens-futtatás nem teljes vagy a selejtarány "
-                "eltérése túl nagy. Lásd: output/simulation_result.json"
+                "Szimulációs ellenőrzés sikertelen: input, kimenet, csomagolás, "
+                "rakodóelosztás vagy átfutási idő eltérése. "
+                "Részletek: output/simulation_result.json"
             )
         LOG.info("Teljes tétel átfutási ideje: %s másodperc", simtime)
         return report
