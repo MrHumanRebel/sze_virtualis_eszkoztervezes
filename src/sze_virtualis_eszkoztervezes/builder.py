@@ -328,6 +328,12 @@ class LiveBuilder:
                 got = float(self.get(belt + ".Length"))
                 if abs(got - 2.0) > 0.0001:
                     errors.append(belt + ": Length=" + str(got))
+                predecessor_count = int(self.get(belt + ".NumPred"))
+                successor_count = int(self.get(belt + ".NumSucc"))
+                if predecessor_count != 1 or successor_count != 1:
+                    errors.append(belt + ": NumPred=" + str(predecessor_count)
+                                  + " NumSucc=" + str(successor_count)
+                                  + " (expected 1/1)")
             except Exception as exc:
                 errors.append(belt + ": hossz visszaolvasása: " + str(exc))
         for path, seconds in self.stations:
@@ -339,10 +345,26 @@ class LiveBuilder:
                 errors.append(path + ": idő visszaolvasása: " + str(exc))
         for path, percentage in self.splits:
             try:
+                if int(self.get(path + ".NumSucc")) != 2:
+                    errors.append(path + ": expected exactly 2 exits")
                 if "percentage" not in str(self.get(path + ".ExitStrategy")).lower():
                     errors.append(path + ": Percentage hiányzik")
             except Exception as exc:
                 errors.append(path + ": stratégia visszaolvasása: " + str(exc))
+        assembly_path = self.folder + ".PACK_Template.Csomagolas_10perc"
+        try:
+            if int(self.get(assembly_path + ".NumPred")) != 2:
+                errors.append(assembly_path + ": 2 inputs required")
+            for attr, expected in (("AssemblyTableMode", "None"),
+                                   ("MainMU", 1),
+                                   ("AssemblyMode", "Delete MUs"),
+                                   ("ExitingMU", "Main MU")):
+                actual = self.get(assembly_path + "." + attr)
+                if str(actual).strip().casefold() != str(expected).casefold():
+                    errors.append(assembly_path + "." + attr + ": " + str(actual)
+                                  + " (expected " + str(expected) + ")")
+        except Exception as exc:
+            errors.append(assembly_path + ": assembly readback failed: " + str(exc))
         try:
             for source in (
                 self.root + ".PC_Beerkezes_10000",
@@ -428,11 +450,16 @@ class LiveBuilder:
             simtime = None
         ratio = bad / (good + bad) if good + bad else None
         completed = good + bad == 10000
+        try:
+            created_input = int(self.get(self.root + ".PC_Beerkezes_10000.StatNumOut"))
+        except Exception:
+            created_input = None
         report = {
             "input_pc_count": 10000,
             "good": good,
             "bad": bad,
             "processed": good + bad,
+            "source_output_count": created_input,
             "defect_ratio": ratio,
             "lot_lead_time_seconds": simtime,
             "lot_lead_time_hours": (
@@ -441,7 +468,8 @@ class LiveBuilder:
             "complete": completed,
             "stop_reason": stop_reason,
             "pass_quantity_and_quality_tolerance": (
-                completed and ratio is not None and abs(ratio - 0.30) <= 0.02
+                completed and created_input == 10000 and ratio is not None
+                and abs(ratio - 0.30) <= 0.02
             ),
             "note": "Batch lead time is not per-unit mean throughput time."
         }
