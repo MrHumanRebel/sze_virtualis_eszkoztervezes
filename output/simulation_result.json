@@ -1,0 +1,20 @@
+{
+  "input_pc_count": 10000,
+  "good": 7000,
+  "bad": 3000,
+  "processed": 10000,
+  "source_output_count": 10000,
+  "packed": 7000,
+  "loaded_at_station_1": 4620,
+  "loaded_at_station_2": 2380,
+  "station_1_actual_share": 0.66,
+  "theoretical_minimum_pack_time_seconds": 4200000,
+  "lot_time_at_least_pack_time": true,
+  "defect_ratio": 0.3,
+  "lot_lead_time_seconds": 4200734.0,
+  "lot_lead_time_hours": 1166.8705555555555,
+  "complete": true,
+  "stop_reason": "complete",
+  "pass_quantity_and_quality_tolerance": true,
+  "note": "Batch lead time is not per-unit mean throughput time."
+}

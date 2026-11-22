@@ -1,0 +1,218 @@
+2026-11-22 20:18:20,665 | INFO | Plant Simulation COM kapcsolódás: Tecnomatix.PlantSimulation.RemoteControl.24.4
+2026-11-22 20:18:20,853 | INFO | Új Siemens modell létrehozva
+2026-11-22 20:18:20,863 | INFO | Fő 2D Frame: .Models.Model
+2026-11-22 20:18:20,883 | INFO | OK három Frame osztály mappája
+2026-11-22 20:18:20,890 | INFO | Objektum: .Models.BeadandoModulok.QA_Template [.MaterialFlow.Frame]
+2026-11-22 20:18:20,890 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.In [.MaterialFlow.Interface]
+2026-11-22 20:18:20,892 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.Out [.MaterialFlow.Interface]
+2026-11-22 20:18:20,892 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.Ellenorzes_3perc [.MaterialFlow.Station]
+2026-11-22 20:18:20,893 | INFO | OK .Models.BeadandoModulok.QA_Template.Ellenorzes_3perc.ProcTime
+2026-11-22 20:18:20,893 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.Jo70_Rossz30 [.MaterialFlow.Station]
+2026-11-22 20:18:20,893 | INFO | OK .Models.BeadandoModulok.QA_Template.Jo70_Rossz30.ProcTime
+2026-11-22 20:18:20,895 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.Cimke_JO_20mp [.MaterialFlow.Station]
+2026-11-22 20:18:20,895 | INFO | OK .Models.BeadandoModulok.QA_Template.Cimke_JO_20mp.ProcTime
+2026-11-22 20:18:20,896 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.Cimke_ROSSZ_20mp [.MaterialFlow.Station]
+2026-11-22 20:18:20,896 | INFO | OK .Models.BeadandoModulok.QA_Template.Cimke_ROSSZ_20mp.ProcTime
+2026-11-22 20:18:20,898 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.Rossz_Termekek [.MaterialFlow.Drain]
+2026-11-22 20:18:20,898 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.CV_Q01 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,898 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q01.Length
+2026-11-22 20:18:20,898 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q01.Speed
+2026-11-22 20:18:20,898 | INFO | OK szalag be: .Models.BeadandoModulok.QA_Template.CV_Q01
+2026-11-22 20:18:20,899 | INFO | OK szalag ki: .Models.BeadandoModulok.QA_Template.CV_Q01
+2026-11-22 20:18:20,899 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.CV_Q02 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,899 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q02.Length
+2026-11-22 20:18:20,899 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q02.Speed
+2026-11-22 20:18:20,901 | INFO | OK szalag be: .Models.BeadandoModulok.QA_Template.CV_Q02
+2026-11-22 20:18:20,901 | INFO | OK szalag ki: .Models.BeadandoModulok.QA_Template.CV_Q02
+2026-11-22 20:18:20,901 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.CV_Q03_JO [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,902 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q03_JO.Length
+2026-11-22 20:18:20,902 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q03_JO.Speed
+2026-11-22 20:18:20,902 | INFO | OK szalag be: .Models.BeadandoModulok.QA_Template.CV_Q03_JO
+2026-11-22 20:18:20,902 | INFO | OK szalag ki: .Models.BeadandoModulok.QA_Template.CV_Q03_JO
+2026-11-22 20:18:20,904 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.CV_Q04_ROSSZ [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,904 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q04_ROSSZ.Length
+2026-11-22 20:18:20,904 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q04_ROSSZ.Speed
+2026-11-22 20:18:20,904 | INFO | OK szalag be: .Models.BeadandoModulok.QA_Template.CV_Q04_ROSSZ
+2026-11-22 20:18:20,904 | INFO | OK szalag ki: .Models.BeadandoModulok.QA_Template.CV_Q04_ROSSZ
+2026-11-22 20:18:20,905 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.CV_Q05 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,905 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q05.Length
+2026-11-22 20:18:20,905 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q05.Speed
+2026-11-22 20:18:20,905 | INFO | OK szalag be: .Models.BeadandoModulok.QA_Template.CV_Q05
+2026-11-22 20:18:20,907 | INFO | OK szalag ki: .Models.BeadandoModulok.QA_Template.CV_Q05
+2026-11-22 20:18:20,907 | INFO | Objektum: .Models.BeadandoModulok.QA_Template.CV_Q06 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,907 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q06.Length
+2026-11-22 20:18:20,907 | INFO | OK .Models.BeadandoModulok.QA_Template.CV_Q06.Speed
+2026-11-22 20:18:20,908 | INFO | OK szalag be: .Models.BeadandoModulok.QA_Template.CV_Q06
+2026-11-22 20:18:20,908 | INFO | OK szalag ki: .Models.BeadandoModulok.QA_Template.CV_Q06
+2026-11-22 20:18:20,908 | INFO | OK .Models.BeadandoModulok.QA_Template.Jo70_Rossz30.ExitStrategy
+2026-11-22 20:18:20,908 | INFO | OK elágazás Jo70_Rossz30
+2026-11-22 20:18:20,908 | INFO | OK .Models.BeadandoModulok.QA_Template.Jo70_Rossz30.ExitStrategyBlocking
+2026-11-22 20:18:20,911 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template [.MaterialFlow.Frame]
+2026-11-22 20:18:20,913 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.In [.MaterialFlow.Interface]
+2026-11-22 20:18:20,913 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.Out [.MaterialFlow.Interface]
+2026-11-22 20:18:20,913 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.Csomagoloanyag_Forras [.MaterialFlow.Source]
+2026-11-22 20:18:20,915 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagoloanyag_Forras.TimeOfGeneration
+2026-11-22 20:18:20,915 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagoloanyag_Forras.Start
+2026-11-22 20:18:20,915 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagoloanyag_Forras.Stop
+2026-11-22 20:18:20,915 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagoloanyag_Forras.Interval
+2026-11-22 20:18:20,916 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagoloanyag_Forras.Number
+2026-11-22 20:18:20,916 | INFO | Forras: .Models.BeadandoModulok.PACK_Template.Csomagoloanyag_Forras / 10000 darab / 1 mp
+2026-11-22 20:18:20,916 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.PC_Elokeszites_20mp [.MaterialFlow.Station]
+2026-11-22 20:18:20,916 | INFO | OK .Models.BeadandoModulok.PACK_Template.PC_Elokeszites_20mp.ProcTime
+2026-11-22 20:18:20,917 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.Anyag_Elokeszites_20mp [.MaterialFlow.Station]
+2026-11-22 20:18:20,918 | INFO | OK .Models.BeadandoModulok.PACK_Template.Anyag_Elokeszites_20mp.ProcTime
+2026-11-22 20:18:20,918 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.Csomagolas_10perc [.MaterialFlow.AssemblyStation]
+2026-11-22 20:18:20,918 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagolas_10perc.ProcTime
+2026-11-22 20:18:20,918 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.Csomagolas_Admin_1perc [.MaterialFlow.Station]
+2026-11-22 20:18:20,919 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagolas_Admin_1perc.ProcTime
+2026-11-22 20:18:20,919 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.CV_P01 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,919 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P01.Length
+2026-11-22 20:18:20,919 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P01.Speed
+2026-11-22 20:18:20,921 | INFO | OK szalag be: .Models.BeadandoModulok.PACK_Template.CV_P01
+2026-11-22 20:18:20,921 | INFO | OK szalag ki: .Models.BeadandoModulok.PACK_Template.CV_P01
+2026-11-22 20:18:20,921 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.CV_P02_PC [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,922 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P02_PC.Length
+2026-11-22 20:18:20,922 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P02_PC.Speed
+2026-11-22 20:18:20,922 | INFO | OK szalag be: .Models.BeadandoModulok.PACK_Template.CV_P02_PC
+2026-11-22 20:18:20,922 | INFO | OK szalag ki: .Models.BeadandoModulok.PACK_Template.CV_P02_PC
+2026-11-22 20:18:20,924 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.CV_P03 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,924 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P03.Length
+2026-11-22 20:18:20,924 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P03.Speed
+2026-11-22 20:18:20,924 | INFO | OK szalag be: .Models.BeadandoModulok.PACK_Template.CV_P03
+2026-11-22 20:18:20,924 | INFO | OK szalag ki: .Models.BeadandoModulok.PACK_Template.CV_P03
+2026-11-22 20:18:20,925 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.CV_P04_ANYAG [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,925 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P04_ANYAG.Length
+2026-11-22 20:18:20,925 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P04_ANYAG.Speed
+2026-11-22 20:18:20,925 | INFO | OK szalag be: .Models.BeadandoModulok.PACK_Template.CV_P04_ANYAG
+2026-11-22 20:18:20,925 | INFO | OK szalag ki: .Models.BeadandoModulok.PACK_Template.CV_P04_ANYAG
+2026-11-22 20:18:20,927 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.CV_P05 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,927 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P05.Length
+2026-11-22 20:18:20,927 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P05.Speed
+2026-11-22 20:18:20,928 | INFO | OK szalag be: .Models.BeadandoModulok.PACK_Template.CV_P05
+2026-11-22 20:18:20,928 | INFO | OK szalag ki: .Models.BeadandoModulok.PACK_Template.CV_P05
+2026-11-22 20:18:20,928 | INFO | Objektum: .Models.BeadandoModulok.PACK_Template.CV_P06 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,928 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P06.Length
+2026-11-22 20:18:20,928 | INFO | OK .Models.BeadandoModulok.PACK_Template.CV_P06.Speed
+2026-11-22 20:18:20,930 | INFO | OK szalag be: .Models.BeadandoModulok.PACK_Template.CV_P06
+2026-11-22 20:18:20,930 | INFO | OK szalag ki: .Models.BeadandoModulok.PACK_Template.CV_P06
+2026-11-22 20:18:20,930 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagolas_10perc.PartListMode
+2026-11-22 20:18:20,930 | INFO | Assembly table mode: PartListMode.None (read-back OK)
+2026-11-22 20:18:20,930 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagolas_10perc.MainMU
+2026-11-22 20:18:20,931 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagolas_10perc.AssemblyMode
+2026-11-22 20:18:20,931 | INFO | OK .Models.BeadandoModulok.PACK_Template.Csomagolas_10perc.ExitingMU
+2026-11-22 20:18:20,934 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template [.MaterialFlow.Frame]
+2026-11-22 20:18:20,934 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.In [.MaterialFlow.Interface]
+2026-11-22 20:18:20,936 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.Out [.MaterialFlow.Interface]
+2026-11-22 20:18:20,938 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.Szallitas_Admin_1perc [.MaterialFlow.Station]
+2026-11-22 20:18:20,938 | INFO | OK .Models.BeadandoModulok.SHIP_Template.Szallitas_Admin_1perc.ProcTime
+2026-11-22 20:18:20,938 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.Rakodo_66_34 [.MaterialFlow.Station]
+2026-11-22 20:18:20,938 | INFO | OK .Models.BeadandoModulok.SHIP_Template.Rakodo_66_34.ProcTime
+2026-11-22 20:18:20,939 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.Rakodo1_5perc [.MaterialFlow.Station]
+2026-11-22 20:18:20,939 | INFO | OK .Models.BeadandoModulok.SHIP_Template.Rakodo1_5perc.ProcTime
+2026-11-22 20:18:20,939 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.Rakodo2_10perc [.MaterialFlow.Station]
+2026-11-22 20:18:20,941 | INFO | OK .Models.BeadandoModulok.SHIP_Template.Rakodo2_10perc.ProcTime
+2026-11-22 20:18:20,941 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.Kiszallitas_1perc [.MaterialFlow.Station]
+2026-11-22 20:18:20,942 | INFO | OK .Models.BeadandoModulok.SHIP_Template.Kiszallitas_1perc.ProcTime
+2026-11-22 20:18:20,944 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.CV_S01 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,944 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S01.Length
+2026-11-22 20:18:20,944 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S01.Speed
+2026-11-22 20:18:20,945 | INFO | OK szalag be: .Models.BeadandoModulok.SHIP_Template.CV_S01
+2026-11-22 20:18:20,945 | INFO | OK szalag ki: .Models.BeadandoModulok.SHIP_Template.CV_S01
+2026-11-22 20:18:20,945 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.CV_S02 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,945 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S02.Length
+2026-11-22 20:18:20,947 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S02.Speed
+2026-11-22 20:18:20,947 | INFO | OK szalag be: .Models.BeadandoModulok.SHIP_Template.CV_S02
+2026-11-22 20:18:20,947 | INFO | OK szalag ki: .Models.BeadandoModulok.SHIP_Template.CV_S02
+2026-11-22 20:18:20,948 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.CV_S03_66 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,948 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S03_66.Length
+2026-11-22 20:18:20,948 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S03_66.Speed
+2026-11-22 20:18:20,950 | INFO | OK szalag be: .Models.BeadandoModulok.SHIP_Template.CV_S03_66
+2026-11-22 20:18:20,950 | INFO | OK szalag ki: .Models.BeadandoModulok.SHIP_Template.CV_S03_66
+2026-11-22 20:18:20,950 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.CV_S04_34 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,951 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S04_34.Length
+2026-11-22 20:18:20,951 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S04_34.Speed
+2026-11-22 20:18:20,951 | INFO | OK szalag be: .Models.BeadandoModulok.SHIP_Template.CV_S04_34
+2026-11-22 20:18:20,951 | INFO | OK szalag ki: .Models.BeadandoModulok.SHIP_Template.CV_S04_34
+2026-11-22 20:18:20,953 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.CV_S05 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,953 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S05.Length
+2026-11-22 20:18:20,953 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S05.Speed
+2026-11-22 20:18:20,953 | INFO | OK szalag be: .Models.BeadandoModulok.SHIP_Template.CV_S05
+2026-11-22 20:18:20,953 | INFO | OK szalag ki: .Models.BeadandoModulok.SHIP_Template.CV_S05
+2026-11-22 20:18:20,954 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.CV_S06 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,954 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S06.Length
+2026-11-22 20:18:20,954 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S06.Speed
+2026-11-22 20:18:20,954 | INFO | OK szalag be: .Models.BeadandoModulok.SHIP_Template.CV_S06
+2026-11-22 20:18:20,954 | INFO | OK szalag ki: .Models.BeadandoModulok.SHIP_Template.CV_S06
+2026-11-22 20:18:20,956 | INFO | Objektum: .Models.BeadandoModulok.SHIP_Template.CV_S07 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,956 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S07.Length
+2026-11-22 20:18:20,957 | INFO | OK .Models.BeadandoModulok.SHIP_Template.CV_S07.Speed
+2026-11-22 20:18:20,957 | INFO | OK szalag be: .Models.BeadandoModulok.SHIP_Template.CV_S07
+2026-11-22 20:18:20,957 | INFO | OK szalag ki: .Models.BeadandoModulok.SHIP_Template.CV_S07
+2026-11-22 20:18:20,957 | INFO | OK .Models.BeadandoModulok.SHIP_Template.Rakodo_66_34.ExitStrategy
+2026-11-22 20:18:20,957 | INFO | OK elágazás Rakodo_66_34
+2026-11-22 20:18:20,957 | INFO | OK .Models.BeadandoModulok.SHIP_Template.Rakodo_66_34.ExitStrategyBlocking
+2026-11-22 20:18:20,959 | INFO | Objektum: .Models.Model.PC_Beerkezes_10000 [.MaterialFlow.Source]
+2026-11-22 20:18:20,959 | INFO | OK .Models.Model.PC_Beerkezes_10000.TimeOfGeneration
+2026-11-22 20:18:20,959 | INFO | OK .Models.Model.PC_Beerkezes_10000.Start
+2026-11-22 20:18:20,961 | INFO | OK .Models.Model.PC_Beerkezes_10000.Stop
+2026-11-22 20:18:20,961 | INFO | OK .Models.Model.PC_Beerkezes_10000.Interval
+2026-11-22 20:18:20,961 | INFO | OK .Models.Model.PC_Beerkezes_10000.Number
+2026-11-22 20:18:20,961 | INFO | Forras: .Models.Model.PC_Beerkezes_10000 / 10000 darab / 1 mp
+2026-11-22 20:18:20,962 | INFO | Objektum: .Models.Model.Minosegellenorzes [.Models.BeadandoModulok.QA_Template]
+2026-11-22 20:18:20,963 | INFO | Objektum: .Models.Model.Csomagolas [.Models.BeadandoModulok.PACK_Template]
+2026-11-22 20:18:20,963 | INFO | Objektum: .Models.Model.Szallitas_Elokeszites [.Models.BeadandoModulok.SHIP_Template]
+2026-11-22 20:18:20,964 | INFO | Objektum: .Models.Model.Kiszallitott_JO [.MaterialFlow.Drain]
+2026-11-22 20:18:20,965 | INFO | Objektum: .Models.Model.CV_MAIN01 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,965 | INFO | OK .Models.Model.CV_MAIN01.Length
+2026-11-22 20:18:20,965 | INFO | OK .Models.Model.CV_MAIN01.Speed
+2026-11-22 20:18:20,967 | INFO | Objektum: .Models.Model.CV_MAIN02 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,967 | INFO | OK .Models.Model.CV_MAIN02.Length
+2026-11-22 20:18:20,968 | INFO | OK .Models.Model.CV_MAIN02.Speed
+2026-11-22 20:18:20,970 | INFO | Objektum: .Models.Model.CV_MAIN03 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,970 | INFO | OK .Models.Model.CV_MAIN03.Length
+2026-11-22 20:18:20,970 | INFO | OK .Models.Model.CV_MAIN03.Speed
+2026-11-22 20:18:20,971 | INFO | Objektum: .Models.Model.CV_MAIN04 [.MaterialFlow.Conveyor]
+2026-11-22 20:18:20,971 | INFO | OK .Models.Model.CV_MAIN04.Length
+2026-11-22 20:18:20,971 | INFO | OK .Models.Model.CV_MAIN04.Speed
+2026-11-22 20:18:20,973 | INFO | OK .Models.Model.EventController.End
+2026-11-22 20:18:20,973 | INFO | EventController.End = 12000000 s (read-back OK)
+2026-11-22 20:18:20,973 | INFO | OK .Models.Model.EventController.StartStat
+2026-11-22 20:18:20,974 | INFO | Objektum: .Models.Model.Allomas_Statisztika [str_to_obj(".UserInterface.Chart")]
+2026-11-22 20:18:20,974 | INFO | OK Chart: Ellenorzes_3perc
+2026-11-22 20:18:20,974 | INFO | OK Chart: Cimke_JO_20mp
+2026-11-22 20:18:20,976 | INFO | OK Chart: Cimke_ROSSZ_20mp
+2026-11-22 20:18:20,976 | INFO | OK Chart: PC_Elokeszites_20mp
+2026-11-22 20:18:20,976 | INFO | OK Chart: Anyag_Elokeszites_20mp
+2026-11-22 20:18:20,977 | INFO | OK Chart: Csomagolas_10perc
+2026-11-22 20:18:20,977 | INFO | OK Chart: Csomagolas_Admin_1perc
+2026-11-22 20:18:20,977 | INFO | OK Chart: Szallitas_Admin_1perc
+2026-11-22 20:18:20,977 | INFO | OK Chart: Rakodo1_5perc
+2026-11-22 20:18:20,977 | INFO | OK Chart: Rakodo2_10perc
+2026-11-22 20:18:20,977 | INFO | OK Chart: Kiszallitas_1perc
+2026-11-22 20:18:20,979 | INFO | OK .Models.Model.Allomas_Statisztika.DisplayInFrame
+2026-11-22 20:18:20,997 | INFO | Modell kész: 3 modul, 23×2 m szalag, 11 állomás, 2 elágazás
+2026-11-22 20:18:21,134 | INFO | SPP mentve: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\JAXC3C.spp (327680 byte)
+2026-11-22 20:18:21,136 | INFO | OK szimuláció reset
+2026-11-22 20:18:21,137 | INFO | OK szimuláció maximum sebességgel, animáció nélkül
+2026-11-22 20:18:21,442 | INFO | Szimuláció t=216300.0 s; forrás=855; QC=1430; címkézett jó=1379; csomagolt=2164; kimenet=359 jó + 166 selejt / 10000
+2026-11-22 20:18:21,979 | INFO | OK szimuláció megállítása
+2026-11-22 20:18:21,982 | INFO | Teljes tétel átfutási ideje: 4200734.0 másodperc
+2026-11-22 20:18:22,085 | INFO | SPP mentve: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\JAXC3C.spp (335872 byte)
+2026-11-22 20:18:22,134 | INFO | OK Siemens PNG: 01_fomodell.png
+2026-11-22 20:18:22,134 | INFO | Siemens PNG elkészült: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\01_fomodell.png (21713 byte)
+2026-11-22 20:18:22,134 | INFO | Valódi Siemens-kép: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\01_fomodell.png
+2026-11-22 20:18:22,167 | INFO | OK Siemens PNG: 02_minosegellenorzes.png
+2026-11-22 20:18:22,167 | INFO | Siemens PNG elkészült: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\02_minosegellenorzes.png (16238 byte)
+2026-11-22 20:18:22,167 | INFO | Valódi Siemens-kép: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\02_minosegellenorzes.png
+2026-11-22 20:18:22,199 | INFO | OK Siemens PNG: 03_csomagolas.png
+2026-11-22 20:18:22,199 | INFO | Siemens PNG elkészült: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\03_csomagolas.png (16359 byte)
+2026-11-22 20:18:22,199 | INFO | Valódi Siemens-kép: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\03_csomagolas.png
+2026-11-22 20:18:22,230 | INFO | OK Siemens PNG: 04_szallitas_elokeszites.png
+2026-11-22 20:18:22,232 | INFO | Siemens PNG elkészült: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\04_szallitas_elokeszites.png (17241 byte)
+2026-11-22 20:18:22,233 | INFO | Valódi Siemens-kép: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\04_szallitas_elokeszites.png
+2026-11-22 20:18:22,283 | INFO | OK Siemens PNG: 05_allomasstatisztika.png
+2026-11-22 20:18:22,285 | INFO | Siemens PNG elkészült: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\05_allomasstatisztika.png (59490 byte)
+2026-11-22 20:18:22,285 | INFO | Valódi Siemens-kép: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\screenshots\05_allomasstatisztika.png
+2026-11-22 20:18:22,288 | INFO | Valódi Siemens képek: 5
+2026-11-22 20:18:22,860 | INFO | Eredményjegyzőkönyv: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\Siemens_meresi_jegyzokonyv.pdf
+2026-11-22 20:18:22,860 | INFO | Fájl: D:\Downloads\sze_virtualis_eszkoztervezes-main\output\JAXC3C.spp

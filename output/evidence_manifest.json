@@ -1,0 +1,43 @@
+{
+  "created_utc": "2026-11-22T19:18:22.285502+00:00",
+  "source": "Siemens Plant Simulation copyBitmapToFile",
+  "synthetic_images": false,
+  "model": "JAXC3C.spp",
+  "spp_sha256": "e815773d7b4995d57e14e90c98253b66201693683296221351713ac556b2de5b",
+  "processed": 10000,
+  "good": 7000,
+  "bad": 3000,
+  "lot_lead_time_seconds": 4200734.0,
+  "screenshots": {
+    "01_fomodell.png": {
+      "sha256": "3cb73142c229d9588e4f0186443f480f4768cc552e04ac1cc7950a42a88aa989",
+      "bytes": 21713,
+      "source": ".Models.Model",
+      "command": ".Models.Model.copyBitmapToFile(\"D:/Downloads/sze_virtualis_eszkoztervezes-main/output/screenshots/01_fomodell\",0,0,1800,1000)"
+    },
+    "02_minosegellenorzes.png": {
+      "sha256": "4d40e6c0c92a38a6459930f80eaade3f90f567cc5af9064fd58d2b739c0f62ea",
+      "bytes": 16238,
+      "source": ".Models.Model.Minosegellenorzes",
+      "command": ".Models.Model.Minosegellenorzes.copyBitmapToFile(\"D:/Downloads/sze_virtualis_eszkoztervezes-main/output/screenshots/02_minosegellenorzes\",0,0,1500,900)"
+    },
+    "03_csomagolas.png": {
+      "sha256": "7b8d00e6f2bdb948c6eb45279373a02b790421dd34e03234fe19ccc14bedd2f9",
+      "bytes": 16359,
+      "source": ".Models.Model.Csomagolas",
+      "command": ".Models.Model.Csomagolas.copyBitmapToFile(\"D:/Downloads/sze_virtualis_eszkoztervezes-main/output/screenshots/03_csomagolas\",0,0,1500,900)"
+    },
+    "04_szallitas_elokeszites.png": {
+      "sha256": "931ee5e14d12c58037004ba2c79f6ae2b3ac6fdf936c4778cf489ce2d1a7b6c3",
+      "bytes": 17241,
+      "source": ".Models.Model.Szallitas_Elokeszites",
+      "command": ".Models.Model.Szallitas_Elokeszites.copyBitmapToFile(\"D:/Downloads/sze_virtualis_eszkoztervezes-main/output/screenshots/04_szallitas_elokeszites\",0,0,1500,900)"
+    },
+    "05_allomasstatisztika.png": {
+      "sha256": "aa310f6464059ae96c72c4c2570334e1bc394faaee1f5c29bb208e00522d4b69",
+      "bytes": 59490,
+      "source": ".Models.Model.Allomas_Statisztika",
+      "command": ".Models.Model.Allomas_Statisztika.copyBitmapToFile(\"D:/Downloads/sze_virtualis_eszkoztervezes-main/output/screenshots/05_allomasstatisztika\",1500,900)"
+    }
+  }
+}

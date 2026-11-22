@@ -1,0 +1,14 @@
+{
+  "sim_time_seconds": 216300.0,
+  "controller_running": true,
+  "source_output": 855,
+  "qa_processed": 1430,
+  "good_labels": 1379,
+  "defective_drain": 765,
+  "packaged": 2164,
+  "delivered": 2566,
+  "wall_time_elapsed_seconds": 0,
+  "good_at_drain": 359,
+  "bad_at_drain": 166,
+  "processed_total": 525
+}
