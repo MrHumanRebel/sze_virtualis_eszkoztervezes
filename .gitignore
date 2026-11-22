@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+*.egg-info/
+build/
+dist/
+output/
+eredmenyek/
+*.spp
+*.spp.bak
+*.spp.previous
+*.log
+.env
