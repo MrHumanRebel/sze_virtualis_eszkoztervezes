@@ -86,3 +86,14 @@ A 2404-es logban szintén látható `SingleProc`, `Line` és `Assembly`
 elnevezések a 2404-ben nem létező próbálkozások voltak, és a generátor
 átváltott `Station`, `Conveyor`, `AssemblyStation` típusokra. Ezek
 most elsődlegesen kerülnek kipróbálásra; így a napló rövidebb és tisztább.
+
+
+## Plant Simulation 2404: Unknown identifier 'EndTime'
+
+A 2404-es EventController COM objektuma a futási végidőt az **End**
+attribútumban kezeli. Az EndTime ebben a telepített verzióban nem található.
+A generátor az End nevet próbálja először, majd újabb verziók esetén az
+EndTime-ot. A 12 000 000 másodperces végidőt visszaolvassa és ellenőrzi,
+mielőtt folytatná a modellépítést. A StartStat beállítás 0 s marad.
+
+A hiba a 2026-11-22 19:57-es, valódi Siemens 2404 COM-naplóban szerepelt.

@@ -96,6 +96,7 @@ class LiveBuilder:
         self.splits: list[tuple[str, tuple[int, int]]] = []
         self.event = ""
         self.assembly_table_attribute = ""
+        self.event_end_attribute = ""
 
     def execute(self, code: str, description: str = ""):
         try:
@@ -315,6 +316,32 @@ class LiveBuilder:
         self.verify()
         LOG.info("Modell kész: 3 modul, 23×2 m szalag, 11 állomás, 2 elágazás")
 
+    def configure_event_end(self, duration_s: int) -> None:
+        """Set the end-of-run limit with version-specific SimTalk attributes.
+
+        Plant Simulation 2404 exposes EventController.End. Later versions
+        describe EndTime. A successful COM write MUST be read back.
+        """
+        errors = []
+        for attr in ("End", "EndTime"):
+            try:
+                self.set_attr(self.event, attr, duration_s)
+                actual = self.get(self.event + "." + attr)
+                if abs(float(actual) - duration_s) > 0.0001:
+                    raise RuntimeError(
+                        "End-time read-back mismatch: " + repr(actual)
+                    )
+                self.event_end_attribute = attr
+                LOG.info("EventController.%s = %s s (read-back OK)",
+                         attr, duration_s)
+                return
+            except Exception as exc:
+                errors.append(attr + ": " + str(exc))
+        raise RuntimeError(
+            "Nem lehet beállítani a Plant Simulation végidejét: "
+            + " | ".join(errors)
+        )
+
     def configure_controls(self):
         try:
             if self.get(self.root + ".EventController.Name"):
@@ -323,7 +350,7 @@ class LiveBuilder:
             self.event = self.create(
                 "controller", self.root, Node("EventController", "station", 80, 45)
             )
-        self.set_attr(self.event, "EndTime", ASSUMPTIONS["end_time_s"])
+        self.configure_event_end(ASSUMPTIONS["end_time_s"])
         self.set_attr(self.event, "StartStat", 0)
         # Chart belongs to the master Frame; includes all actual station objects.
         chart = self.create("chart", self.root,
@@ -345,6 +372,15 @@ class LiveBuilder:
 
     def verify(self):
         errors = []
+        if not self.event_end_attribute:
+            errors.append("EventController end-time attribute not selected")
+        else:
+            try:
+                stop_time = float(self.get(self.event + "." + self.event_end_attribute))
+                if abs(stop_time - ASSUMPTIONS["end_time_s"]) > 0.0001:
+                    errors.append("EventController stop time mismatch: " + str(stop_time))
+            except Exception as exc:
+                errors.append("EventController end-time read-back: " + str(exc))
         if len(self.conveyors) != 23:
             errors.append("Nem 23 szalag készült.")
         if len(self.stations) != 11:
@@ -419,6 +455,7 @@ class LiveBuilder:
             "stations": len(self.stations),
             "percentage_splits": len(self.splits),
             "assembly_mode_attribute": self.assembly_table_attribute,
+            "event_end_attribute": self.event_end_attribute,
             "errors": errors,
             "siemens_live_verification": True
         }

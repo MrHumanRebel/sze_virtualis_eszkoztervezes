@@ -26,6 +26,8 @@ class FakePlantSimulation:
             return sum(src == parent for src, dst in self.connections)
         if key == "AssemblyTableMode":
             raise KeyError("Unknown identifier 'AssemblyTableMode' (PS 2404)")
+        if key == "EndTime":
+            raise KeyError("Unknown identifier 'EndTime' (PS 2404)")
         return self.objects[parent][key]
 
     def ExecuteSimTalk(self, code: str):
@@ -69,6 +71,8 @@ class FakePlantSimulation:
                 raise AssertionError("Plant Simulation 2404: Source.Amount is not a valid attribute")
             if key == "AssemblyTableMode":
                 raise AssertionError("Plant Simulation 2404: Unknown identifier AssemblyTableMode")
+            if key == "EndTime":
+                raise AssertionError("Plant Simulation 2404: Unknown identifier EndTime")
             raw = value.rstrip(";")
             if raw.startswith('"') and raw.endswith('"'):
                 parsed = raw[1:-1]
@@ -119,6 +123,8 @@ def test_full_model_builds_on_fake_com(tmp_path: Path):
     assert assembly["AssemblyMode"] == "Delete MUs"
     assert assembly["PartListMode"] == "None"
     assert builder.assembly_table_attribute == "PartListMode"
+    assert builder.event_end_attribute == "End"
+    assert fake.objects[builder.event]["End"] == 12000000
     assert (tmp_path / "config_validation.json").is_file()
     for belt in builder.conveyors:
         assert fake.GetValue(belt + ".NumPred") == 1
@@ -275,3 +281,56 @@ def test_both_assembly_mode_attributes_missing_is_fatal(tmp_path: Path):
     builder = LiveBuilder(UnsupportedFake(), tmp_path)
     with pytest.raises(RuntimeError, match="None/1:1"):
         builder.build()
+
+
+def test_modern_event_controller_endtime_fallback(tmp_path: Path):
+    """Later Plant Simulation versions may call the setting EndTime."""
+    class EndTimeFake(FakePlantSimulation):
+        def GetValue(self, expression: str):
+            if expression.endswith(".End"):
+                raise KeyError("Unknown identifier End")
+            if expression.endswith(".EndTime"):
+                path = expression.rsplit(".", 1)[0]
+                return self.objects[path]["EndTime"]
+            return super().GetValue(expression)
+
+        def ExecuteSimTalk(self, code: str):
+            if ".End :=" in code:
+                raise ValueError("Unknown identifier End")
+            if ".EndTime :=" in code:
+                path, raw = code.split(".EndTime := ", 1)
+                self.objects[path]["EndTime"] = float(raw)
+                return
+            return super().ExecuteSimTalk(code)
+
+    fake = EndTimeFake()
+    builder = LiveBuilder(fake, tmp_path)
+    builder.build()
+    assert builder.event_end_attribute == "EndTime"
+    assert fake.objects[builder.event]["EndTime"] == 12000000
+
+
+def test_both_event_end_aliases_missing_is_fatal(tmp_path: Path):
+    import pytest
+
+    class MissingEndFake(FakePlantSimulation):
+        def ExecuteSimTalk(self, code: str):
+            if ".End :=" in code or ".EndTime :=" in code:
+                raise ValueError("Unknown identifier for end time")
+            return super().ExecuteSimTalk(code)
+
+    with pytest.raises(RuntimeError, match="végidejét"):
+        LiveBuilder(MissingEndFake(), tmp_path).build()
+
+
+def test_event_controller_end_time_readback_mismatch_is_fatal(tmp_path: Path):
+    import pytest
+
+    class WrongEndFake(FakePlantSimulation):
+        def GetValue(self, expression: str):
+            if expression.endswith((".End", ".EndTime")):
+                return 42
+            return super().GetValue(expression)
+
+    with pytest.raises(RuntimeError, match="végidejét"):
+        LiveBuilder(WrongEndFake(), tmp_path).build()
