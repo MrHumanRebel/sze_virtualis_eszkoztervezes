@@ -6,7 +6,7 @@ Számítógép-konfigurációk minőségellenőrzése, csomagolása és szállí
 
 A feladatot három különálló Frame-re bontottam. A főmodell összeköti őket, minden állomásközi szalag 2 méteres. Nem akartam túlbonyolítani: ahol lehet, a Siemens saját, beépített funkcióit használom.
 
-[**Modellbemutató (PDF)**](docs/generated/Modelltajekoztato.pdf) · [Feladatlap átirata (PDF)](docs/generated/Feladatkiiras_atirat.pdf) · [Eredeti feladatlap kezelése](docs/assignment/README.md)
+[**Eredeti beadandó kiírás (PDF)**](docs/assignment/PS_beadando_original.pdf) · [Modellbemutató (PDF)](docs/generated/Modelltajekoztato.pdf) · [Szöveges átirat](docs/generated/Feladatkiiras_atirat.pdf)
 
 ## A modell
 
@@ -28,7 +28,7 @@ Az eredeti kiírás nem ad meg beérkezési ütemet és szalagsebességet. Ezeke
 
 A Plant Simulation Student Windowsra készült. Python 3.10+ is kell.
 
-1. Klónozd le a repót vagy töltsd le ZIP-ben.
+1. Klónozd le a repót (ha később GitHubra is publikálod az eredményt), vagy töltsd le ZIP-ben (csak helyi futtatáshoz).
 2. Nyisd meg Windows alatt, és futtasd az **INDITAS.bat** fájlt.
 3. Add meg a **saját hatkarakteres Neptun-kódodat**.
 4. A sikeres futás után az output mappában lesz a Neptun-kód.spp, a mért eredmény, öt valódi Siemens-képernyőkép és a SHA256 ellenőrző manifeszt.
@@ -48,9 +48,9 @@ Amíg nincs sikeres Siemens-futtatás, **nincs igazolt beadandó .spp és nincs 
 
 Sikeres helyi futás után az ellenőrzött állományok feltöltése:
 
-    .\tools\publish_results.ps1 -Neptun ABC123 -OriginalAssignmentPdf "C:\Users\...\PS beadandó.pdf"
+    .\tools\publish_results.ps1 -Neptun ABC123
 
-Ez a valódi, eredeti feladatlapot is változatlan fájlként tölti fel a docs/assignment mappába, ha megadod az elérési útját. A Windowsos önhosztolt GitHub-runnerhez külön workflow is van, ha az automatizált feltöltést választod.
+Az eredeti feladatlap már változatlanul fent van. A publikáló parancshoz **Git klón és hitelesített Git push** kell: a Download ZIP nem tartalmaz Git-adatokat. A Windowsos önhosztolt GitHub-runnerhez külön workflow is van.
 
 A kimeneti feltöltés tartalmazza a modellellenőrzést, a szimuláció darabszámait, az átfutási időt, a screenshotokat és a fájlok SHA256-azonosítóit.
 

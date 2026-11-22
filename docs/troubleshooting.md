@@ -62,3 +62,11 @@ nem alkalmas a teljes darabszám mérésére. A kumulatív érték a
 A régi ZIP nem frissül: töltsd le újra a main ágat, vagy a repo
 mappájában futtasd a git pull parancsot. A generátor új modellt hoz létre,
 nem a korábbi félkész Frame-en folytatja a munkát.
+
+
+## Ha a GitHub-feltöltő nem talál .git mappát
+
+A Download ZIP nem Git-klón. A helyi modellgenerálás ZIP-ből is működik,
+de a feltöltéshez `git clone` + GitHub-hitelesítés kell. A kész `output`
+mappát át lehet másolni a friss Git-klónba, majd abból indítani a
+`tools/publish_results.ps1` szkriptet.
