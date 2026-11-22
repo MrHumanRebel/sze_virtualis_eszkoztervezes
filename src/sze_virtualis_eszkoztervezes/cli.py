@@ -23,6 +23,8 @@ def main(argv=None) -> int:
     parser.add_argument("--neptun", help="Saját, 6 karakteres Neptun-kód")
     parser.add_argument("--build-only", action="store_true",
                         help="Ne indítsa a 10000 darabos futást")
+    parser.add_argument("--evidence-only", action="store_true",
+                        help="Képek és PDF a korábbi, mentett és ellenőrzött SPP-ből")
     parser.add_argument("--template", type=Path,
                         help="Régebbi verziónál használható üres .spp sablon")
     parser.add_argument("--output-dir", type=Path, default=Path("output"))
@@ -54,8 +56,26 @@ def main(argv=None) -> int:
         from .builder import LiveBuilder, dispatch
         ps = dispatch()
         builder = LiveBuilder(ps, out)
-        builder.build(args.template)
         dest = out / (neptun + ".spp")
+        if args.evidence_only:
+            if args.build_only:
+                raise ValueError("--build-only és --evidence-only együtt nem használható.")
+            if not dest.is_file():
+                raise FileNotFoundError("Nincs korábbi SPP fájl: " + str(dest))
+            ps.LoadModel(str(dest))
+            builder.root = ".Models.Model"
+            builder.event = builder.root + ".EventController"
+            from .resume import verify_saved_run
+            verify_saved_run(builder, dest)
+            from .evidence import capture
+            manifest = capture(builder, dest)
+            log.info("Valódi Siemens képek: %s", len(manifest["screenshots"]))
+            from .result_report import generate
+            pdf_path = generate(out)
+            log.info("Mérési jegyzőkönyv: %s", pdf_path)
+            log.info("Az eredeti SPP fájlt nem módosítottam: %s", dest)
+            return 0
+        builder.build(args.template)
         builder.save(dest)
         if args.build_only:
             log.warning("Csak építés; a 10 000 PC-s eredmény NINCS igazolva.")
