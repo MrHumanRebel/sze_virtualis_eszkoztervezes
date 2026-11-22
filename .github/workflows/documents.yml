@@ -1,0 +1,50 @@
+name: Generate polished PDF documentation
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/generate_documents.py
+      - .github/workflows/documents.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PDF builder
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-lato
+          python -m pip install reportlab==4.4.4 pymupdf
+      - name: Render
+        run: python tools/generate_documents.py
+      - name: Check real PDFs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import fitz
+          checks = {"Modelltajekoztato.pdf": 4, "Feladatkiiras_atirat.pdf": 2}
+          for filename, count in checks.items():
+              filename = Path("docs/generated") / filename
+              with fitz.open(filename) as doc:
+                  assert len(doc) == count
+                  assert all(len(page.get_text()) > 80 for page in doc)
+              assert filename.stat().st_size > 3000
+              print(filename, filename.stat().st_size)
+          PY
+      - name: Commit generated PDF files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/generated/Modelltajekoztato.pdf docs/generated/Feladatkiiras_atirat.pdf
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: publish polished A4 PDFs"
+            git push
+          fi
