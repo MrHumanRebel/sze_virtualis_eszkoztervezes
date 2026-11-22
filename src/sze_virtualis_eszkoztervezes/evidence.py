@@ -43,6 +43,8 @@ def capture(builder, spp_path: Path) -> dict:
     images={}
     for filename,obj,width,height in sources:
         output=(screenshots/filename).resolve()
+        # Do not mistake an old PNG for proof of a new Siemens export.
+        output.unlink(missing_ok=True)
         args = (
             [json.dumps(str(output), ensure_ascii=True), str(width), str(height)]
             if filename == "05_allomasstatisztika.png"
