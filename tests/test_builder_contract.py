@@ -367,3 +367,18 @@ def test_start_requires_explicit_fast_mode(tmp_path: Path):
     with pytest.raises(RuntimeError, match="ellenőrzés"):
         builder.run(timeout_s=0)
     assert builder.event + ".start(false,false)" in fake.commands
+
+
+def test_no_drain_output_after_two_simulated_hours_is_diagnosed(tmp_path: Path):
+    import pytest
+    fake = FakePlantSimulation()
+    builder = LiveBuilder(fake, tmp_path)
+    builder.build()
+    fake.objects[".Models.Model.Kiszallitott_JO"]["StatDeleted"] = 0
+    fake.objects[".Models.Model.Minosegellenorzes.Rossz_Termekek"]["StatDeleted"] = 0
+    fake.objects[".Models.Model.PC_Beerkezes_10000"]["StatNumOut"] = 100
+    fake.objects[".Models.Model.Minosegellenorzes.Ellenorzes_3perc"]["StatNumOut"] = 30
+    fake.objects[builder.event]["SimTime"] = 7201
+    with pytest.raises(RuntimeError, match="Anyagáram-elakadás"):
+        builder.run(timeout_s=2)
+    assert (tmp_path / "progress.json").exists()
