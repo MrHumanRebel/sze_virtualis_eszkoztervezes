@@ -156,3 +156,22 @@ nem fogad el véletlenül egy korábbi screenshotot.
 statisztikákat:** az `EXPORT_KEPEK.bat` szándékosan hibával leáll. Ilyenkor
 a teljes szimuláció újrafuttatása a megoldás, de az új `INDITAS.bat`
 már a javított képexportot használja.
+
+
+## 2404: `copyBitmapToFile` hívás OK, de nincs PNG (20:12-es futás)
+
+A Siemens COM-hívás hibamentesen lefutott, de nem hozott létre képfájlt.
+Ez nem a 10 000 darabos szimuláció hibája: a valódi SPP már elkészült.
+A friss képexport több verziókompatibilis útvonalat próbál:
+
+- A Windows-útvonal SimTalkban előre perjellel szerepel (pl. `D:/Downloads/...`).
+- Először `.png` nélküli, majd kiterjesztéses nevet használunk.
+- Kezeljük a Siemens által automatikusan hozzáadott `.png` kiterjesztést.
+- A siker feltétele, hogy a fájl létezzen, ne legyen üres, és PNG-fejléce legyen.
+- Hibánál a napló kiírja a tényleges SimTalk-parancsot és minden ellenőrzött fájlútvonalat.
+
+**Ne töröld az `output` könyvtárat.** A javított forráskódot és az
+`EXPORT_KEPEK.bat` fájlt másold a meglévő projektbe, vagy az `output`
+mappát másold át az új ZIP-ből kicsomagolt projektbe. Ezután kizárólag
+az `EXPORT_KEPEK.bat` fájlt indítsd el. Ha a betöltött `.spp` a mentett
+statisztikákat már nem tartalmazza, a program jelzi, hogy újrafuttatás kell.
