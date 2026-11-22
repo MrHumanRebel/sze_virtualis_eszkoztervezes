@@ -360,7 +360,9 @@ class LiveBuilder:
                                    ("AssemblyMode", "Delete MUs"),
                                    ("ExitingMU", "Main MU")):
                 actual = self.get(assembly_path + "." + attr)
-                if str(actual).strip().casefold() != str(expected).casefold():
+                matches = (int(actual) == expected if isinstance(expected, int)
+                           else str(actual).strip().casefold() == str(expected).casefold())
+                if not matches:
                     errors.append(assembly_path + "." + attr + ": " + str(actual)
                                   + " (expected " + str(expected) + ")")
         except Exception as exc:
