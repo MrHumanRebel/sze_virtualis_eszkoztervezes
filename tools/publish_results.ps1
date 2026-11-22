@@ -8,6 +8,9 @@ param(
 $ErrorActionPreference='Stop'
 $repo=(Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 Set-Location $repo
+if (!(Test-Path (Join-Path $repo '.git'))) {
+  throw 'GitHub feltöltéshez git clone szükséges. A Download ZIP nem tartalmaz .git mappát. A kész output mappát másold át egy klónozott repóba, majd ott futtasd újra ezt a szkriptet.'
+}
 $Neptun=$Neptun.ToUpperInvariant()
 $local=Join-Path $repo 'output'
 $spp=Join-Path $local "$Neptun.spp"
@@ -19,6 +22,15 @@ foreach ($path in @($spp,$result,$manifest,$validation)) {
 }
 $r=Get-Content $result -Raw -Encoding UTF8 | ConvertFrom-Json
 $e=Get-Content $manifest -Raw -Encoding UTF8 | ConvertFrom-Json
+$v=Get-Content $validation -Raw -Encoding UTF8 | ConvertFrom-Json
+if (!$v.siemens_live_verification -or @($v.errors).Count -gt 0) {
+  throw 'A Siemens modellparaméterek ellenőrzése sikertelen.'
+}
+if ($r.source_output_count -ne 10000 -or $r.packed -ne $r.good -or
+    ($r.loaded_at_station_1 + $r.loaded_at_station_2) -ne $r.good -or
+    !$r.lot_time_at_least_pack_time) {
+  throw 'Az input, az összeszerelés vagy a rakodás mért számlálói nem egyeznek.'
+}
 if (!$r.complete -or !$r.pass_quantity_and_quality_tolerance -or $r.processed -ne 10000) {
   throw 'Nem sikeres a 10 000 darabos Siemens-futtatás.'
 }
@@ -27,6 +39,31 @@ if ($e.synthetic_images -ne $false -or @($e.screenshots.PSObject.Properties).Cou
 }
 $checksum=(Get-FileHash $spp -Algorithm SHA256).Hash
 if ($checksum -ne $e.spp_sha256) { throw 'SPP SHA256-eltérés.' }
+$expectedShots=@(
+  '01_fomodell.png',
+  '02_minosegellenorzes.png',
+  '03_csomagolas.png',
+  '04_szallitas_elokeszites.png',
+  '05_allomasstatisztika.png'
+)
+$pngSignature=[byte[]](137,80,78,71,13,10,26,10)
+foreach ($name in $expectedShots) {
+  $entry=$e.screenshots.PSObject.Properties[$name]
+  if ($null -eq $entry) { throw "Hiányzik a képernyőkép manifest-bejegyzése: $name" }
+  $path=Join-Path $local ("screenshots\" + $name)
+  if (!(Test-Path $path)) { throw "Hiányzik a tényleges Siemens PNG: $name" }
+  $bytes=[System.IO.File]::ReadAllBytes($path)
+  if ($bytes.Length -lt 1000 -or $bytes.Length -ne $entry.Value.bytes) {
+    throw "Eltérő méretű Siemens PNG: $name"
+  }
+  for ($i=0; $i -lt 8; $i++) {
+    if ($bytes[$i] -ne $pngSignature[$i]) { throw "Hibás PNG fejléc: $name" }
+  }
+  $actual=(Get-FileHash $path -Algorithm SHA256).Hash
+  if ($actual -ne $entry.Value.sha256) {
+    throw "Eltérő vagy módosított Siemens-képernyőkép: $name"
+  }
+}
 $target=Join-Path $repo "submissions\$Neptun"
 New-Item -ItemType Directory -Path $target -Force | Out-Null
 Copy-Item $spp (Join-Path $target "$Neptun.spp") -Force
@@ -47,8 +84,6 @@ if ($OriginalAssignmentPdf) {
   git add -f $original
 }
 git add -f $target
-git config user.name 'SzE Plant Simulation export'
-git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 git diff --cached --quiet
 if ($LASTEXITCODE -eq 0) { Write-Host 'Nem történt változás.'; exit 0 }
 git commit -m "evidence: verified $Neptun Plant Simulation model and screenshots"
