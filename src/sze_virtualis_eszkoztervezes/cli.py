@@ -62,6 +62,9 @@ def main(argv=None) -> int:
         else:
             builder.run(args.timeout)
             builder.save(dest)
+            from .evidence import capture
+            manifest = capture(builder, dest)
+            log.info("Valódi Siemens képek: %s", len(manifest["screenshots"]))
         log.info("Fájl: %s", dest)
         return 0
     except Exception:

@@ -1,41 +1,63 @@
-# SzE – Virtuális eszköztervezés (GKLM_AUTM029)
+# Virtuális eszköztervezés
 
-**Siemens Tecnomatix Plant Simulation 2D beadandó: PC minőségellenőrzés, csomagolás és szállítás-előkészítés.**
+**Széchenyi István Egyetem · GKLM_AUTM029 · 2026/27 I. félév**
 
-Ez a repó a 2026/27. I. féléves, kétoldalas egyetemi feladat alapján épül. A megoldás tiszta, ellenőrizhető modellspecifikációból és **Windowsos Siemens COM-modellgenerátorból** áll.
+Számítógép-konfigurációk minőségellenőrzése, csomagolása és szállítás-előkészítése Siemens Plant Simulation 2D-ben.
 
-## Gyors indítás (Windows)
+A feladatot három különálló Frame-re bontottam. A főmodell összeköti őket, minden állomásközi szalag 2 méteres. Nem akartam túlbonyolítani: ahol lehet, a Siemens saját, beépített funkcióit használom.
 
-1. Telepítsd a Siemens Plant Simulation Student verziót és a Python 3-at.
-2. Töltsd le a repót (Code → Download ZIP), és csomagold ki.
-3. Kattints az **INDITAS.bat** fájlra, majd add meg a 6 karakteres Neptun-kódodat.
-4. Ellenőrizd az output mappában a NEPTUNKOD.spp fájlt, a szimuláció eredményét és a Plant Simulation grafikont.
+[**Modellbemutató (PDF)**](docs/generated/Modelltajekoztato.pdf) · [Feladatlap átirata (PDF)](docs/generated/Feladatkiiras_atirat.pdf) · [Eredeti feladatlap kezelése](docs/assignment/README.md)
 
-Parancssori futás (a telepített csomaggal):
+## A modell
 
-- Offline szerkezet megtekintése: python -m sze_virtualis_eszkoztervezes --plan
-- Modell és teljes futtatás: python -m sze_virtualis_eszkoztervezes --neptun ABC123
-- Csak modellépítés: python -m sze_virtualis_eszkoztervezes --neptun ABC123 --build-only
-- Sablonból építés régebbi COM verzióhoz: python -m sze_virtualis_eszkoztervezes --neptun ABC123 --template C:\utvonal\ures.spp
+| Rész | Beállítás |
+| --- | --- |
+| Minőségellenőrzés | 3 perc, 70% jó / 30% hibás |
+| Címkézés | 20 másodperc mindkét ágon |
+| Előkészítés | PC és csomagolóanyag: 20–20 másodperc |
+| Csomagolás | 10 perc, 1 PC + 1 csomagolóanyag |
+| Adminisztráció | 1 perc a csomagolás után és 1 perc a szállítás előtt |
+| Rakodók | 5 és 10 perc, 66/34%-os elosztás |
+| Kiszállítás | 1 perc |
+| Szállítószalagok | 23 darab, mindegyik 2 m |
+| Szimuláció | 10 000 beérkező számítógép |
 
-A példa Neptun-kódot **cseréld ki a sajátodra**.
+Az eredeti kiírás nem ad meg beérkezési ütemet és szalagsebességet. Ezeket egyelőre **1 másodperc / darab** és **1 m/s** értékkel vettem fel. Az elágazási százalékok sztochasztikusak.
 
-## Pontos specifikáció
+## Futtatás
 
-- 3 külön 2D Frame: minőségellenőrzés, csomagolás, szállítás-előkészítés.
-- 23 db, egyenként 2 m-es szállítószalag.
-- Ellenőrzés: 180 s, 70% jó / 30% selejt; mindkét címkézés 20 s.
-- PC és csomagolóanyag előkészítése: 20–20 s; 1 PC + 1 csomagolóanyag összeállítása 600 s.
-- Csomagolási és szállítás-előkészítési adminisztráció: 60–60 s.
-- Rakodó 1: 300 s / 66%, Rakodó 2: 600 s / 34%; kiszállítás: 60 s.
-- Állomásstatisztikai Chart; 10 000 PC beérkezésének teljes átfutási ideje.
+A Plant Simulation Student Windowsra készült. Python 3.10+ is kell.
 
-A PDF-ben **nem rögzített** szalagsebességet és érkezési időközt 1 m/s és 1 s modellezési feltételezésként állítottuk be. A véletlen százalékos elágazások darabszámai futásonként eltérhetnek.
+1. Klónozd le a repót vagy töltsd le ZIP-ben.
+2. Nyisd meg Windows alatt, és futtasd az **INDITAS.bat** fájlt.
+3. Add meg a **saját hatkarakteres Neptun-kódodat**.
+4. A sikeres futás után az output mappában lesz a Neptun-kód.spp, a mért eredmény, öt valódi Siemens-képernyőkép és a SHA256 ellenőrző manifeszt.
 
-## Minőség és státusz
+A kétféle ellenőrzés nem ugyanaz. A **GitHub CI** a Python-forrást és a modellgráfot teszteli, a **helyi Plant Simulation** pedig a tényleges .spp fájlt és a 10 000 darabos szimulációt.
 
-A GitHub Actions **offline gráf- és paraméterteszteket** futtat; a CI nem Siemens-kompatibilitási teszt. Valódi, átadható SPP-fájl csak a helyben telepített Plant Simulation futtatása után jön létre. Amíg ez nem történik meg hibamentesen, **nem tekinthető teljesített beadandónak**.
+Windows parancssorból:
 
-Kapcsolódó dokumentáció: docs/requirements.md, docs/architecture.md, docs/troubleshooting.md.
+    py -3 -m pip install -e ".[windows]"
+    py -3 -m sze_virtualis_eszkoztervezes --neptun ABC123
 
-A már meglévő MIT-licencet megtartottuk.
+Az ABC123 helyére a saját Neptun-kódod kerüljön.
+
+## Bizonyítás és feltöltés
+
+Amíg nincs sikeres Siemens-futtatás, **nincs igazolt beadandó .spp és nincs valódi screenshot** a repóban. Nem helyettesítem ezeket látványtervekkel.
+
+Sikeres helyi futás után az ellenőrzött állományok feltöltése:
+
+    .\tools\publish_results.ps1 -Neptun ABC123 -OriginalAssignmentPdf "C:\Users\...\PS beadandó.pdf"
+
+Ez a valódi, eredeti feladatlapot is változatlan fájlként tölti fel a docs/assignment mappába, ha megadod az elérési útját. A Windowsos önhosztolt GitHub-runnerhez külön workflow is van, ha az automatizált feltöltést választod.
+
+A kimeneti feltöltés tartalmazza a modellellenőrzést, a szimuláció darabszámait, az átfutási időt, a screenshotokat és a fájlok SHA256-azonosítóit.
+
+## Követelmények és határok
+
+A részletes megfeleltetés a [docs/requirements.md](docs/requirements.md) fájlban, a folyamat [docs/architecture.md](docs/architecture.md) alatt van. A Windowsos hibakeresési lépések: [docs/troubleshooting.md](docs/troubleshooting.md).
+
+A repóhoz tartozó forráskód és a PDF-generátor offline tesztelhető. A licencköteles Siemens programot nem lehet a GitHub ubuntu-latest runnerén lefuttatni. Valódi szimulációs igazolás csak Windowsos, telepített Plant Simulation környezetben készülhet.
+
+**Beadásra a végleges Neptun-kód.spp fájl kell, nem ez a repó vagy a PDF.**

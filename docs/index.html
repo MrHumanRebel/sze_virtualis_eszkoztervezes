@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Virtuális eszköztervezés · GKLM_AUTM029</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,"Segoe UI",sans-serif;color:#17191e;background:#fafbfc;font-synthesis:none}
+*{box-sizing:border-box}
+body{margin:0}
+a{color:#087e82;text-decoration:none}a:hover{text-decoration:underline}
+main{max-width:1020px;margin:0 auto;padding:48px 30px 100px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #e3e6ea;padding-bottom:18px;color:#6c7380;font-size:.83rem;letter-spacing:.03em}
+nav b{color:#17191e}
+header{padding:98px 0 66px}
+.kicker{color:#087e82;font-size:.77rem;font-weight:700;letter-spacing:.11em}
+h1{font-weight:700;letter-spacing:-.058em;font-size:clamp(2.55rem,6vw,4.7rem);line-height:1.06;margin:26px 0;max-width:850px}
+.lead{font-size:1.17rem;line-height:1.64;color:#56606a;max-width:735px}
+.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.links a{display:inline-flex;border-radius:12px;border:1px solid #e2e6e8;padding:13px 19px;background:white;font-weight:600;font-size:.9rem}
+.links a.primary{background:#191b20;color:white;border-color:#191b20}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #e3e6ea;border-bottom:1px solid #e3e6ea;padding:36px 0;gap:25px}
+.metrics strong{display:block;letter-spacing:-.05em;font-size:2.3rem}
+.metrics span{display:block;color:#6c7380;font-size:.87rem;margin-top:8px}
+section{padding-top:70px}
+h2{font-size:1.7rem;letter-spacing:-.04em;margin-bottom:13px}
+section>p{color:#66717a;line-height:1.7;max-width:670px}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:35px}
+.step{min-height:120px;padding:22px 20px;border:1px solid #e4e9ea;border-radius:18px;background:white}
+.step small{color:#087e82;font-size:.75rem;font-weight:700}
+.step h3{font-size:1.1rem;margin:18px 0 8px;letter-spacing:-.02em}
+.step p{color:#78818b;margin:0;font-size:.9rem}
+.note{border-left:2px solid #0b8486;padding:14px 22px;color:#54616a;margin-top:35px;line-height:1.6;background:#f1f7f7}
+footer{margin-top:100px;border-top:1px solid #e3e6ea;padding-top:26px;font-size:.85rem;color:#7a828a;line-height:1.5}
+@media(max-width:700px){main{padding:24px 22px 65px}header{padding:70px 0 40px}.metrics{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr 1fr}}
+@media(max-width:450px){.flow,.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<nav><b>GKLM_AUTM029</b><span>Széchenyi István Egyetem · 2026/27 I.</span></nav>
+<header>
+<div class="kicker">SIEMENS PLANT SIMULATION · 2D</div>
+<h1>PC-konfigurációk. Három folyamat. Egy modell.</h1>
+<p class="lead">Minőségellenőrzés, csomagolás és szállítás-előkészítés. Úgy raktam össze a folyamatot, hogy átlátható legyen, és minden lényeges állomás külön ellenőrizhető maradjon.</p>
+<div class="links">
+<a class="primary" href="generated/Modelltajekoztato.pdf">Modellbemutató PDF</a>
+<a href="generated/Feladatkiiras_atirat.pdf">Feladatlap átirat</a>
+<a href="../README.md">GitHub README</a>
+</div>
+</header>
+<div class="metrics">
+<div><strong>10 000</strong><span>Beérkező számítógép</span></div>
+<div><strong>30%</strong><span>Selejtarány</span></div>
+<div><strong>2 m</strong><span>Szalaghossz minden kapcsolaton</span></div>
+</div>
+<section>
+<h2>A folyamat</h2>
+<p>A modellezésnél a PDF követelményeit tartottam meg. A három részt külön Frame-ként kezelem, nem egyetlen zsúfolt rajzként.</p>
+<div class="flow">
+<article class="step"><small>01</small><h3>Beérkezés</h3><p>10 000 számítógép</p></article>
+<article class="step"><small>02</small><h3>Minőségellenőrzés</h3><p>70% jó · 30% rossz</p></article>
+<article class="step"><small>03</small><h3>Csomagolás</h3><p>1 PC + 1 anyag</p></article>
+<article class="step"><small>04</small><h3>Szállítás</h3><p>66% / 34% rakodás</p></article>
+</div>
+<div class="note">Az eredményeket kizárólag a Siemens Plant Simulation tényleges futtatása után publikálom. A statikus ábra nem helyettesíti a működő .spp modellt vagy a hiteles screenshotot.</div>
+</section>
+<section><h2>Futtatás és leadás</h2>
+<p>A végső állomány a saját Neptun-kódommal elnevezett .spp. A program Windowsos Siemens telepítést igényel. A forrás és az offline tesztek GitHubon vannak; a mérést és a valódi képeket a telepített alkalmazás állítja elő.</p></section>
+<footer>Virtuális eszköztervezés · GKLM_AUTM029 · 2026/27 I. félév</footer>
+</main>
+</body>
+</html>
