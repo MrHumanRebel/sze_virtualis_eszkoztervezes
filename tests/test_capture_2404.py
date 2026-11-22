@@ -12,7 +12,7 @@ import pytest
 import struct
 import zlib
 
-from sze_virtualis_eszkoztervezes.evidence import capture
+from sze_virtualis_eszkoztervezes.evidence import capture, export_png
 from sze_virtualis_eszkoztervezes.resume import verify_saved_run
 
 
@@ -153,3 +153,39 @@ def test_capture_rejects_unverified_run(tmp_path: Path):
     with pytest.raises(RuntimeError, match="Nem igazolt"):
         capture(mock, spp)
     assert not mock.commands
+
+
+def test_export_accepts_automatic_png_extension(tmp_path: Path):
+    mock = DummySiemensExporter(tmp_path)
+    png = tmp_path / "screenshots" / "11.png"
+    export_png(mock, ".Models.Model", png, 1800, 1000)
+    assert png.is_file()
+    assert png.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+def test_export_retries_if_com_writes_no_image(tmp_path: Path):
+    class FirstNoOutput(DummySiemensExporter):
+        def execute(self, command, description=""):
+            if not self.commands:
+                self.commands.append(command)
+                return False
+            return super().execute(command, description)
+
+    mock = FirstNoOutput(tmp_path)
+    png = tmp_path / "new.png"
+    export_png(mock, ".Models.Model", png, 1800, 1000)
+    assert len(mock.commands) == 2
+    assert png.is_file()
+
+
+def test_export_never_accepts_old_image(tmp_path: Path):
+    png = tmp_path / "old.png"
+    export_png(DummySiemensExporter(tmp_path), ".Models.Model",
+               png, 1800, 1000)
+    assert png.is_file()
+    class NoExport:
+        def execute(self, command, description=""):
+            return False
+    with pytest.raises(RuntimeError, match="nem írt ki PNG"):
+        export_png(NoExport(), ".Models.Model", png, 1800, 1000)
+    assert not png.is_file()
